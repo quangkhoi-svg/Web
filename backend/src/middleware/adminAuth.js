@@ -1,12 +1,14 @@
-// Admin account đơn giản
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+// 🔥 XÓA MẶC ĐỊNH HOÀN TOÀN
+// Nếu ENV không có, dùng chính tài khoản bạn muốn
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "ltking225";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "22052005";
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "gta5vn-gallery-token";
 
 // ---- LOGIN ----
 export function loginHandler(req, res) {
   const { username, password } = req.body || {};
 
+  // So sánh user/pass
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
     return res.json({ token: ADMIN_TOKEN });
   }

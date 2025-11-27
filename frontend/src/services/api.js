@@ -1,5 +1,5 @@
 // src/services/api.js
-const API_BASE_URL = "http://localhost:4000/api";
+const API_BASE_URL = "https://gta5vn-backend.onrender.com/api";
 
 // Lấy token admin từ localStorage để gửi lên backend
 const getAuthHeaders = () => {

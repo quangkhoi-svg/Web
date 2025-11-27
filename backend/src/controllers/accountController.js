@@ -1,70 +1,119 @@
-// src/controllers/accountController.js
-import { accounts } from "../data/accounts.js";
+// backend/src/controllers/accountController.js
+import Account from "../models/Account.js";
 
-export const getAccounts = (req, res) => {
-  const { server, section } = req.query;
-  let result = accounts;
+// GET /api/accounts?server=&section=
+export const getAccounts = async (req, res) => {
+  try {
+    const { server, section } = req.query;
+    const filter = {};
 
-  if (server) result = result.filter((acc) => acc.server === server);
-  if (section) result = result.filter((acc) => acc.section === section);
+    if (server) filter.server = server;
+    if (section) filter.section = section;
 
-  res.json(result);
+    const accounts = await Account.find(filter).sort({ createdAt: -1 });
+    res.json(accounts);
+  } catch (err) {
+    console.error("getAccounts error:", err);
+    res.status(500).json({ message: "Lỗi khi lấy danh sách account" });
+  }
 };
 
-export const getAccountById = (req, res) => {
-  const account = accounts.find((a) => a.id === req.params.id);
-  if (!account) return res.status(404).json({ message: "Account not found" });
-  res.json(account);
+// GET /api/accounts/:id
+export const getAccountById = async (req, res) => {
+  try {
+    const acc = await Account.findById(req.params.id);
+    if (!acc) return res.status(404).json({ message: "Account not found" });
+
+    res.json(acc);
+  } catch (err) {
+    console.error("getAccountById error:", err);
+    res.status(500).json({ message: "Lỗi khi lấy account" });
+  }
 };
 
-export const createAccount = (req, res) => {
-  const { game, server, section, title, rank, description, mainImage, images } =
-    req.body;
+// POST /api/accounts (ADMIN)
+export const createAccount = async (req, res) => {
+  try {
+    const {
+      name,
+      server,
+      section,
+      price,
+      description,
+      thumbnailUrl,
+      bannerGifUrl,
+      galleryImages,
+      isFeatured,
+    } = req.body;
 
-  const newAccount = {
-    id: Date.now().toString(),
-    game: game || "GTA5VN",
-    server,
-    section: section || "character",
-    title,
-    rank,
-    description,
-    mainImage: mainImage || "",   // ⭐ Ảnh chính
-    images: images || []          // ⭐ Ảnh phụ
-  };
+    const newAcc = await Account.create({
+      name,
+      server,
+      section,
+      price,
+      description: description || "",
+      thumbnailUrl: thumbnailUrl || "",
+      bannerGifUrl: bannerGifUrl || "",
+      galleryImages: galleryImages || [],
+      isFeatured: isFeatured || false,
+    });
 
-  accounts.push(newAccount);
-  res.status(201).json(newAccount);
+    res.status(201).json(newAcc);
+  } catch (err) {
+    console.error("createAccount error:", err);
+    res.status(500).json({ message: "Lỗi khi tạo account" });
+  }
 };
 
-export const updateAccount = (req, res) => {
-  const { id } = req.params;
-  const { game, server, section, title, rank, description, mainImage, images } =
-    req.body;
+// PUT /api/accounts/:id  (ADMIN)
+export const updateAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      name,
+      server,
+      section,
+      price,
+      description,
+      thumbnailUrl,
+      bannerGifUrl,
+      galleryImages,
+      isFeatured,
+    } = req.body;
 
-  const index = accounts.findIndex((a) => a.id === id);
-  if (index === -1) return res.status(404).json({ message: "Account not found" });
+    const acc = await Account.findById(id);
+    if (!acc) return res.status(404).json({ message: "Account not found" });
 
-  accounts[index] = {
-    ...accounts[index],
-    game: game ?? accounts[index].game,
-    server: server ?? accounts[index].server,
-    section: section ?? accounts[index].section,
-    title: title ?? accounts[index].title,
-    rank: rank ?? accounts[index].rank,
-    description: description ?? accounts[index].description,
-    mainImage: mainImage ?? accounts[index].mainImage,
-    images: images ?? accounts[index].images
-  };
+    acc.name = name ?? acc.name;
+    acc.server = server ?? acc.server;
+    acc.section = section ?? acc.section;
+    acc.price = price ?? acc.price;
+    acc.description = description ?? acc.description;
+    acc.thumbnailUrl = thumbnailUrl ?? acc.thumbnailUrl;
+    acc.bannerGifUrl = bannerGifUrl ?? acc.bannerGifUrl;
+    acc.galleryImages = galleryImages ?? acc.galleryImages;
+    acc.isFeatured = isFeatured ?? acc.isFeatured;
 
-  res.json(accounts[index]);
+    const updated = await acc.save();
+    res.json(updated);
+  } catch (err) {
+    console.error("updateAccount error:", err);
+    res.status(500).json({ message: "Lỗi khi cập nhật account" });
+  }
 };
 
-export const deleteAccount = (req, res) => {
-  const { id } = req.params;
-  const index = accounts.findIndex((a) => a.id === id);
-  if (index === -1) return res.status(404).json({ message: "Account not found" });
+// DELETE /api/accounts/:id (ADMIN)
+export const deleteAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-  accounts.splice(index, 1);
-  res.json({ message: "Account removed" });
+    const deleted = await Account.findByIdAndDelete(id);
+    if (!deleted)
+      return res.status(404).json({ message: "Account not found" });
+
+    res.json({ message: "Account removed" });
+  } catch (err) {
+    console.error("deleteAccount error:", err);
+    res.status(500).json({ message: "Lỗi khi xóa account" });
+  }
 };

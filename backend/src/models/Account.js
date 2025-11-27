@@ -1,8 +1,9 @@
+// backend/src/models/Account.js
 import mongoose from "mongoose";
 
 const AccountSchema = new mongoose.Schema(
   {
-    // Tên acc hiển thị trên web
+    // Tên acc hiển thị
     name: { type: String, required: true },
 
     // Server: "los-santos" | "blaine" | ...
@@ -17,16 +18,16 @@ const AccountSchema = new mongoose.Schema(
     // Mô tả chi tiết
     description: { type: String },
 
-    // Ảnh thumbnail (jpg/png) – hiện trên card
+    // Ảnh thumbnail (card)
     thumbnailUrl: { type: String },
 
-    // GIF banner lớn (động)
+    // GIF banner
     bannerGifUrl: { type: String },
 
-    // Danh sách ảnh khác (nếu bạn muốn gallery)
+    // Gallery ảnh
     galleryImages: [{ type: String }],
 
-    // Acc nổi bật?
+    // Acc nổi bật
     isFeatured: { type: Boolean, default: false },
   },
   { timestamps: true }

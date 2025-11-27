@@ -41,39 +41,39 @@ export const getAccountById = async (req, res) => {
  * POST /api/accounts  (ADMIN)
  * Tạo mới account
  */
+// POST /api/accounts (ADMIN)
 export const createAccount = async (req, res) => {
   try {
-    const {
-      name,
-      server,
-      section,
-      price,
-      description,
-      thumbnailUrl,
-      bannerGifUrl,
-      galleryImages,
-      isFeatured,
-    } = req.body;
+    const body = req.body || {};
 
-    const newAcc = await Account.create({
-      name,
-      server,
-      section,
-      price,
-      description: description || "",
-      thumbnailUrl: thumbnailUrl || "",
-      bannerGifUrl: bannerGifUrl || "",
-      galleryImages: galleryImages || [],
-      isFeatured: isFeatured || false,
-    });
+    // FE hiện tại đang gửi: title, category, rank, mainImage, images, bannerGif
+    const mapped = {
+      name: body.name || body.title,               // tiêu đề acc
+      server: body.server,                         // server giữ nguyên
+      section: body.section || body.category,      // category -> section
+      price: body.price ?? body.rank,              // rank -> price (tạm dùng như giá)
+      description: body.description || "",
+      thumbnailUrl: body.thumbnailUrl || body.mainImage || "",
+      bannerGifUrl: body.bannerGifUrl || body.bannerGif || "",
+      galleryImages: body.galleryImages || body.images || [],
+      isFeatured: body.isFeatured ?? false,
+    };
 
+    // Tự validate trước cho rõ lỗi (tránh ValidationError khó hiểu)
+    if (!mapped.name || !mapped.server || !mapped.section || mapped.price == null) {
+      return res.status(400).json({
+        message: "Thiếu trường bắt buộc (name/title, server, section/category, price/rank)",
+      });
+    }
+
+    const newAcc = await Account.create(mapped);
     res.status(201).json(newAcc);
   } catch (err) {
     console.error("createAccount error:", err);
-    // ⚠️ Trả chi tiết lỗi validate từ Mongoose để dễ debug
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: "Lỗi khi tạo account" });
   }
 };
+
 
 /**
  * PUT /api/accounts/:id  (ADMIN)
@@ -82,36 +82,29 @@ export const createAccount = async (req, res) => {
 export const updateAccount = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      name,
-      server,
-      section,
-      price,
-      description,
-      thumbnailUrl,
-      bannerGifUrl,
-      galleryImages,
-      isFeatured,
-    } = req.body;
+    const body = req.body || {};
 
     const acc = await Account.findById(id);
     if (!acc) return res.status(404).json({ message: "Account not found" });
 
-    acc.name = name ?? acc.name;
-    acc.server = server ?? acc.server;
-    acc.section = section ?? acc.section;
-    acc.price = price ?? acc.price;
-    acc.description = description ?? acc.description;
-    acc.thumbnailUrl = thumbnailUrl ?? acc.thumbnailUrl;
-    acc.bannerGifUrl = bannerGifUrl ?? acc.bannerGifUrl;
-    acc.galleryImages = galleryImages ?? acc.galleryImages;
-    acc.isFeatured = isFeatured ?? acc.isFeatured;
+    // Cho phép update cả key mới lẫn key cũ
+    acc.name = (body.name || body.title) ?? acc.name;
+    acc.server = body.server ?? acc.server;
+    acc.section = (body.section || body.category) ?? acc.section;
+    acc.price = (body.price ?? body.rank) ?? acc.price;
+    acc.description = body.description ?? acc.description;
+    acc.thumbnailUrl =
+      (body.thumbnailUrl || body.mainImage) ?? acc.thumbnailUrl;
+    acc.bannerGifUrl =
+      (body.bannerGifUrl || body.bannerGif) ?? acc.bannerGifUrl;
+    acc.galleryImages = (body.galleryImages || body.images) ?? acc.galleryImages;
+    acc.isFeatured = body.isFeatured ?? acc.isFeatured;
 
     const updated = await acc.save();
     res.json(updated);
   } catch (err) {
     console.error("updateAccount error:", err);
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: "Lỗi khi cập nhật account" });
   }
 };
 

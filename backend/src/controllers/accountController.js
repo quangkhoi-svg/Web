@@ -1,7 +1,10 @@
 // backend/src/controllers/accountController.js
 import Account from "../models/Account.js";
 
-// GET /api/accounts?server=&section=
+/**
+ * GET /api/accounts?server=&section=
+ * Lấy danh sách account (có filter theo server, section)
+ */
 export const getAccounts = async (req, res) => {
   try {
     const { server, section } = req.query;
@@ -18,7 +21,10 @@ export const getAccounts = async (req, res) => {
   }
 };
 
-// GET /api/accounts/:id
+/**
+ * GET /api/accounts/:id
+ * Lấy chi tiết 1 account
+ */
 export const getAccountById = async (req, res) => {
   try {
     const acc = await Account.findById(req.params.id);
@@ -31,7 +37,10 @@ export const getAccountById = async (req, res) => {
   }
 };
 
-// POST /api/accounts (ADMIN)
+/**
+ * POST /api/accounts  (ADMIN)
+ * Tạo mới account
+ */
 export const createAccount = async (req, res) => {
   try {
     const {
@@ -61,11 +70,15 @@ export const createAccount = async (req, res) => {
     res.status(201).json(newAcc);
   } catch (err) {
     console.error("createAccount error:", err);
-    res.status(500).json({ message: "Lỗi khi tạo account" });
+    // ⚠️ Trả chi tiết lỗi validate từ Mongoose để dễ debug
+    res.status(400).json({ message: err.message });
   }
 };
 
-// PUT /api/accounts/:id  (ADMIN)
+/**
+ * PUT /api/accounts/:id  (ADMIN)
+ * Cập nhật account
+ */
 export const updateAccount = async (req, res) => {
   try {
     const { id } = req.params;
@@ -98,11 +111,14 @@ export const updateAccount = async (req, res) => {
     res.json(updated);
   } catch (err) {
     console.error("updateAccount error:", err);
-    res.status(500).json({ message: "Lỗi khi cập nhật account" });
+    res.status(400).json({ message: err.message });
   }
 };
 
-// DELETE /api/accounts/:id (ADMIN)
+/**
+ * DELETE /api/accounts/:id  (ADMIN)
+ * Xoá account
+ */
 export const deleteAccount = async (req, res) => {
   try {
     const { id } = req.params;

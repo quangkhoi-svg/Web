@@ -4,6 +4,8 @@ import morgan from "morgan";
 import path from "path";
 import fs from "fs";
 import multer from "multer";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 import accountRoutes from "./routes/accountRoutes.js";
 import serverRoutes from "./routes/serverRoutes.js";
@@ -13,9 +15,49 @@ import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-app.use(cors());
+/* ============================
+   🛡 HELMET: bảo vệ header
+============================ */
+app.use(helmet());
+
+/* ============================
+   🌐 CORS: chỉ cho phép domain tin cậy
+============================ */
+const allowedOrigins = [
+  "http://localhost:5173",                         // dev local (Vite)
+  "https://hilarious-sawine-12b798.netlify.app",  // frontend Netlify của bạn
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Request không có origin (Postman, server nội bộ) -> cho phép
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"), false);
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(morgan("dev"));
+
+/* ============================
+   🔐 RATE LIMIT: chống spam login
+============================ */
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 phút
+  max: 20, // tối đa 20 lần / 15 phút / IP
+  message: "Thử đăng nhập quá nhiều, vui lòng thử lại sau.",
+});
+
+// Áp dụng limiter cho riêng endpoint login
+app.use("/api/auth/login", loginLimiter);
 
 /* ============================
    🟩 PHẦN UPLOAD FILE
@@ -53,9 +95,8 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 });
 
 /* ============================
-   🟦 END PHẦN UPLOAD FILE
+   🟦 ROUTES CHÍNH
 ============================ */
-
 
 app.get("/", (req, res) => {
   res.json({ message: "GTA5VN API running" });

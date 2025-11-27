@@ -1,10 +1,7 @@
 // backend/src/controllers/accountController.js
 import Account from "../models/Account.js";
 
-/**
- * GET /api/accounts?server=&section=
- * Lấy danh sách account (có filter theo server, section)
- */
+// GET /api/accounts?server=&section=
 export const getAccounts = async (req, res) => {
   try {
     const { server, section } = req.query;
@@ -21,15 +18,11 @@ export const getAccounts = async (req, res) => {
   }
 };
 
-/**
- * GET /api/accounts/:id
- * Lấy chi tiết 1 account
- */
+// GET /api/accounts/:id
 export const getAccountById = async (req, res) => {
   try {
     const acc = await Account.findById(req.params.id);
     if (!acc) return res.status(404).json({ message: "Account not found" });
-
     res.json(acc);
   } catch (err) {
     console.error("getAccountById error:", err);
@@ -37,36 +30,82 @@ export const getAccountById = async (req, res) => {
   }
 };
 
-/**
- * POST /api/accounts  (ADMIN)
- * Tạo mới account
- */
 // POST /api/accounts (ADMIN)
 export const createAccount = async (req, res) => {
   try {
-    const body = req.body || {};
+    // Log để debug xem frontend gửi gì
+    console.log("👉 createAccount body:", req.body);
 
-    // FE hiện tại đang gửi: title, category, rank, mainImage, images, bannerGif
-    const mapped = {
-      name: body.name || body.title,               // tiêu đề acc
-      server: body.server,                         // server giữ nguyên
-      section: body.section || body.category,      // category -> section
-      price: body.price ?? body.rank,              // rank -> price (tạm dùng như giá)
-      description: body.description || "",
-      thumbnailUrl: body.thumbnailUrl || body.mainImage || "",
-      bannerGifUrl: body.bannerGifUrl || body.bannerGif || "",
-      galleryImages: body.galleryImages || body.images || [],
-      isFeatured: body.isFeatured ?? false,
-    };
+    // Dữ liệu “đúng chuẩn”
+    const {
+      name,
+      server,
+      section,
+      price,
+      description,
+      thumbnailUrl,
+      bannerGifUrl,
+      galleryImages,
+      isFeatured,
+    } = req.body;
 
-    // Tự validate trước cho rõ lỗi (tránh ValidationError khó hiểu)
-    if (!mapped.name || !mapped.server || !mapped.section || mapped.price == null) {
+    // Dữ liệu kiểu cũ từ form admin (những field có khả năng tồn tại)
+    const legacyTitle = req.body.title;          // tiêu đề
+    const legacyServer = req.body.server;        // server chọn trong form
+    const legacySection = req.body.section;      // danh mục: character / fashion
+    const legacyPrice = req.body.rankPrice;      // hoặc price kiểu string
+    const legacyInfo = req.body.info;            // mô tả
+    const legacyMainImg = req.body.mainImageUrl; // link ảnh chính sau upload
+    const legacyImages = req.body.images;        // mảng link ảnh phụ
+
+    // Gộp lại – ưu tiên field mới, fallback sang field cũ
+    const finalName = name || legacyTitle || "No title";
+    const finalServer = server || legacyServer || "los-santos";
+    const finalSection = section || legacySection || "character";
+
+    let finalPrice = price;
+    if (finalPrice == null && legacyPrice != null) {
+      const p = Number(legacyPrice);
+      finalPrice = Number.isNaN(p) ? 0 : p;
+    }
+
+    const finalDescription = description || legacyInfo || "";
+    const finalThumbnailUrl = thumbnailUrl || legacyMainImg || "";
+    const finalBannerGifUrl = bannerGifUrl || "";
+    const finalGalleryImages =
+      Array.isArray(galleryImages) && galleryImages.length > 0
+        ? galleryImages
+        : Array.isArray(legacyImages)
+        ? legacyImages
+        : [];
+
+    const finalIsFeatured = typeof isFeatured === "boolean" ? isFeatured : false;
+
+    // Nếu vẫn thiếu thì trả về 400 (Bad Request) cho dễ hiểu, không phải 500
+    if (!finalName || !finalServer || !finalSection || finalPrice == null) {
       return res.status(400).json({
-        message: "Thiếu trường bắt buộc (name/title, server, section/category, price/rank)",
+        message: "Thiếu dữ liệu bắt buộc",
+        missing: {
+          name: !!finalName,
+          server: !!finalServer,
+          section: !!finalSection,
+          price: finalPrice != null,
+        },
       });
     }
 
-    const newAcc = await Account.create(mapped);
+    const newAcc = await Account.create({
+      name: finalName,
+      server: finalServer,
+      section: finalSection,
+      price: finalPrice,
+      description: finalDescription,
+      thumbnailUrl: finalThumbnailUrl,
+      bannerGifUrl: finalBannerGifUrl,
+      galleryImages: finalGalleryImages,
+      isFeatured: finalIsFeatured,
+    });
+
     res.status(201).json(newAcc);
   } catch (err) {
     console.error("createAccount error:", err);
@@ -74,31 +113,34 @@ export const createAccount = async (req, res) => {
   }
 };
 
-
-/**
- * PUT /api/accounts/:id  (ADMIN)
- * Cập nhật account
- */
+// PUT /api/accounts/:id  (ADMIN)
 export const updateAccount = async (req, res) => {
   try {
     const { id } = req.params;
-    const body = req.body || {};
+    const {
+      name,
+      server,
+      section,
+      price,
+      description,
+      thumbnailUrl,
+      bannerGifUrl,
+      galleryImages,
+      isFeatured,
+    } = req.body;
 
     const acc = await Account.findById(id);
     if (!acc) return res.status(404).json({ message: "Account not found" });
 
-    // Cho phép update cả key mới lẫn key cũ
-    acc.name = (body.name || body.title) ?? acc.name;
-    acc.server = body.server ?? acc.server;
-    acc.section = (body.section || body.category) ?? acc.section;
-    acc.price = (body.price ?? body.rank) ?? acc.price;
-    acc.description = body.description ?? acc.description;
-    acc.thumbnailUrl =
-      (body.thumbnailUrl || body.mainImage) ?? acc.thumbnailUrl;
-    acc.bannerGifUrl =
-      (body.bannerGifUrl || body.bannerGif) ?? acc.bannerGifUrl;
-    acc.galleryImages = (body.galleryImages || body.images) ?? acc.galleryImages;
-    acc.isFeatured = body.isFeatured ?? acc.isFeatured;
+    acc.name = name ?? acc.name;
+    acc.server = server ?? acc.server;
+    acc.section = section ?? acc.section;
+    acc.price = price ?? acc.price;
+    acc.description = description ?? acc.description;
+    acc.thumbnailUrl = thumbnailUrl ?? acc.thumbnailUrl;
+    acc.bannerGifUrl = bannerGifUrl ?? acc.bannerGifUrl;
+    acc.galleryImages = galleryImages ?? acc.galleryImages;
+    acc.isFeatured = isFeatured ?? acc.isFeatured;
 
     const updated = await acc.save();
     res.json(updated);
@@ -108,14 +150,10 @@ export const updateAccount = async (req, res) => {
   }
 };
 
-/**
- * DELETE /api/accounts/:id  (ADMIN)
- * Xoá account
- */
+// DELETE /api/accounts/:id (ADMIN)
 export const deleteAccount = async (req, res) => {
   try {
     const { id } = req.params;
-
     const deleted = await Account.findByIdAndDelete(id);
     if (!deleted)
       return res.status(404).json({ message: "Account not found" });

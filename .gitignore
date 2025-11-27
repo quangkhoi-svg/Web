@@ -1,0 +1,12 @@
+# bỏ node_modules của cả backend + frontend
+node_modules/
+
+# bỏ folder uploads chứa GIF to
+backend/uploads/
+
+# build file của frontend
+dist/
+build/
+
+# file môi trường
+.env

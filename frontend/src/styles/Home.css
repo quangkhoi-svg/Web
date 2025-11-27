@@ -1,0 +1,281 @@
+/* ===== HOME WRAP ===== */
+.home-wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 16px 60px;
+}
+
+/* ===== HERO LAYOUT ===== */
+.home-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+/* TEXT BLOCK LEFT */
+.home-hero-left h1 {
+  font-size: clamp(2.2rem, 3vw, 2.8rem);
+  margin: 0 0 10px;
+  color: #f9fafb;
+  text-shadow: 0 14px 40px rgba(0, 0, 0, 0.8);
+}
+
+.home-hero-left p {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  max-width: 34rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.home-hero-left strong {
+  color: #e5e7eb;
+}
+
+/* DISCLAIMER */
+.home-disclaimer {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* ===== HERO CARD RIGHT – 3D AUTO ===== */
+.home-hero-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1300px;          /* chiều sâu 3D */
+}
+
+.home-hero-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 18px 18px 20px;
+  border-radius: 18px;
+
+  background:
+    radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.35), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.28), transparent 55%),
+    #020617;
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.95),
+    0 0 40px rgba(15, 23, 42, 0.9);
+
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transform-origin: center;
+
+  /* 🔥 tự float + xoay 3D */
+  animation: homeCardFloat 9s ease-in-out infinite;
+}
+
+.home-hero-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 140deg,
+    transparent,
+    rgba(56, 189, 248, 0.7),
+    transparent,
+    rgba(129, 140, 248, 0.8),
+    transparent
+  );
+  opacity: 0.5;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.home-hero-card * {
+  position: relative;
+}
+
+/* hover: dừng animation, nghiêng mạnh hơn chút */
+.home-hero-card:hover {
+  animation-play-state: paused;
+  transform: translate3d(0, -12px, 30px) rotateX(8deg) rotateY(-10deg) scale(1.03);
+  border-color: rgba(96, 165, 250, 1);
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 1),
+    0 0 55px rgba(37, 99, 235, 0.9);
+}
+
+/* BADGE */
+.home-hero-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  padding: 4px 11px;
+  border-radius: 999px;
+
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(96, 165, 250, 0.9);
+  color: #93c5fd;
+}
+
+.home-hero-card h3 {
+  margin: 10px 0 4px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.home-hero-card p {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+
+/* MINI CARDS ROW */
+.home-mini-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.home-mini-card {
+  padding: 10px 10px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(31, 41, 55, 0.95);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.9);
+}
+
+.home-mini-title {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.home-mini-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+/* ===== ORBITS – QUAY CHẬM ===== */
+.home-orbit {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px dashed rgba(148, 163, 184, 0.55);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
+  pointer-events: none;
+  animation: homeOrbitSpin 24s linear infinite;
+}
+
+.home-o1 {
+  width: 260px;
+  height: 260px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.65;
+}
+
+.home-o2 {
+  width: 320px;
+  height: 320px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%);
+  opacity: 0.45;
+  animation-duration: 30s;
+  animation-direction: reverse;
+}
+
+.home-o3 {
+  width: 390px;
+  height: 390px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -54%);
+  opacity: 0.3;
+  animation-duration: 40s;
+}
+
+/* ===== FEATURED ===== */
+.featured-wrap {
+  margin-top: 12px;
+}
+
+.section-title h2 {
+  margin-bottom: 0.1rem;
+  color: #e5e7eb;
+}
+
+.section-title p {
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.featured-note {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .home-hero-right {
+    order: -1;
+  }
+
+  .home-wrap {
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-wrap {
+    padding-inline: 14px;
+  }
+
+  .home-mini-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .home-o2,
+  .home-o3 {
+    display: none;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes homeCardFloat {
+  0% {
+    transform: translate3d(0, 0, 0) rotateX(10deg) rotateY(-14deg);
+  }
+  25% {
+    transform: translate3d(0, -6px, 16px) rotateX(6deg) rotateY(-18deg);
+  }
+  50% {
+    transform: translate3d(0, -10px, 26px) rotateX(3deg) rotateY(-10deg);
+  }
+  75% {
+    transform: translate3d(0, -6px, 18px) rotateX(8deg) rotateY(-4deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotateX(10deg) rotateY(-14deg);
+  }
+}
+
+@keyframes homeOrbitSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}

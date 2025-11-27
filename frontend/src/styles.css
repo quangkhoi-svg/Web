@@ -1,0 +1,3051 @@
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    background: radial-gradient(circle at top, #0b1120 0, #020617 70%, #0b1120 100%);
+    color: #e5e7eb;
+  }
+
+  /* hiệu ứng nền hơi “texture” như game */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -30%;
+    z-index: -1;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.35) 0, transparent 55%),
+      radial-gradient(circle at 90% 10%, rgba(59, 130, 246, 0.4) 0, transparent 55%),
+      radial-gradient(circle at 50% 100%, rgba(15, 23, 42, 0.9) 0, transparent 65%);
+    opacity: 0.8;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container {
+    padding: 1.5rem 1.5rem 3rem;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  /* NAVBAR */
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    background: linear-gradient(90deg, #020617 0, #0f172a 30%, #1d2a49 100%);
+    border-bottom: 1px solid #1f2937;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .logo {
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: 0.08em;
+    color: #e5e7eb;
+  }
+
+  .logo span {
+    font-weight: 600;
+    color: #60a5fa;
+  }
+
+  .navbar-right a {
+    margin-left: 0.8rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: #9ca3af;
+    position: relative;
+    transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .navbar-right a.active {
+    color: #f9fafb;
+    background: radial-gradient(circle at top, #2563eb, #1d4ed8);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.6);
+  }
+
+  /* gạch nhỏ dưới menu khi hover */
+
+  .navbar-right a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #38bdf8, #f97316);
+    border-radius: 999px;
+    transition: width 0.2s ease;
+  }
+
+  .navbar-right a:hover::after {
+    width: 60%;
+  }
+
+  .navbar-right a:not(.active):hover {
+    color: #e5e7eb;
+  }
+
+  /* FOOTER */
+
+  .footer {
+    border-top: 1px solid #111827;
+    padding: 0.8rem 1.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6b7280;
+    background: #020617;
+  }
+
+  /* BUTTONS */
+
+  .btn-primary,
+  button {
+    border: none;
+    border-radius: 999px;
+    padding: 0.55rem 1.2rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: linear-gradient(135deg, #f97316, #facc15);
+    color: #0b1120;
+    font-weight: 600;
+    box-shadow: 0 12px 28px rgba(248, 165, 66, 0.6);
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+      filter 0.2s ease;
+  }
+
+  .btn-primary:hover,
+  button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    box-shadow: 0 16px 40px rgba(248, 165, 66, 0.85);
+  }
+
+  .btn-ghost {
+    border-radius: 999px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+    border: 1px solid #334155;
+    background: rgba(15, 23, 42, 0.8);
+    color: #e5e7eb;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
+  }
+
+  .btn-ghost:hover {
+    border-color: #38bdf8;
+    box-shadow: 0 14px 32px rgba(56, 189, 248, 0.7);
+  }
+
+  /* HERO */
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2.4rem;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(2.2rem, 3.2vw, 3rem);
+    margin-bottom: 0.7rem;
+    color: #f9fafb;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  }
+
+  .hero-text p {
+    color: #9ca3af;
+    max-width: 34rem;
+    font-size: 0.96rem;
+  }
+
+  .disclaimer {
+    margin-top: 0.9rem;
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+
+  .hero-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-card {
+    background: radial-gradient(circle at top, #1d4ed8, #020617);
+    border-radius: 1.4rem;
+    padding: 1.3rem 1.4rem;
+    width: 100%;
+    max-width: 340px;
+    border: 1px solid rgba(148, 163, 184, 0.55);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-card::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background: conic-gradient(
+      from 140deg,
+      transparent,
+      rgba(56, 189, 248, 0.4),
+      transparent,
+      rgba(129, 140, 248, 0.5),
+      transparent
+    );
+    opacity: 0.6;
+    mix-blend-mode: screen;
+  }
+
+  .hero-card * {
+    position: relative;
+  }
+
+  .hero-card h3 {
+    margin-top: 0.6rem;
+    margin-bottom: 0.4rem;
+    color: #e5e7eb;
+  }
+
+  .hero-card p {
+    font-size: 0.86rem;
+    color: #cbd5f5;
+  }
+
+  .hero-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(96, 165, 250, 0.8);
+    color: #93c5fd;
+  }
+
+  .hero-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 32px 80px rgba(15, 23, 42, 0.95);
+  }
+
+  /* SECTION TITLE */
+
+  .section-title h2 {
+    margin-bottom: 0.1rem;
+    color: #e5e7eb;
+  }
+
+  .section-title p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #9ca3af;
+    font-size: 0.9rem;
+  }
+
+  /* GRID CARDS (ACCOUNTS) */
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .card {
+    background: radial-gradient(circle at top left, #0f172a, #020617);
+    border-radius: 1.1rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+      border-color 0.25s ease, filter 0.25s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-7px) scale(1.02);
+    box-shadow: 0 34px 90px rgba(0, 0, 0, 1);
+    border-color: #2563eb;
+    filter: brightness(1.02);
+  }
+
+  .card-image {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body {
+    padding: 0.85rem 1rem 1.1rem;
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: 1rem;
+    color: #f9fafb;
+  }
+
+  .card-subtitle {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+    color: #cbd5f5;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-link {
+    font-size: 0.85rem;
+    color: #38bdf8;
+  }
+
+  /* SERVER CARDS */
+
+  .servers-row {
+    display: flex;
+    gap: 1.4rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .server-card,
+  .server-card-btn {
+    min-width: 260px;
+    max-width: 320px;
+  }
+
+  .server-card-image-wrapper {
+    position: relative;
+    border-radius: 1.3rem;
+    overflow: hidden;
+    background: radial-gradient(circle at top, #1d4ed8, #020617);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .server-card-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    opacity: 0.85;
+  }
+
+  .server-card-image-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    pointer-events: none;
+  }
+
+  .server-card-image-wrapper:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 80px rgba(15, 23, 42, 0.95);
+  }
+
+  .server-card-online {
+    position: absolute;
+    bottom: 58px;
+    left: 16px;
+    font-size: 0.8rem;
+    color: #22c55e;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+  }
+
+  .server-card-footer {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    text-align: center;
+    padding: 0.45rem 0.7rem;
+    border-radius: 0.9rem;
+    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+    border: 1px solid rgba(125, 211, 252, 0.7);
+    box-shadow: 0 14px 32px rgba(56, 189, 248, 0.8);
+    color: #f9fafb;
+  }
+
+  .server-card-footer-main {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .server-card-footer-sub {
+    font-size: 0.75rem;
+    opacity: 0.95;
+  }
+
+  /* ADMIN LAYOUT CƠ BẢN */
+
+  .admin-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .admin-form {
+    background: radial-gradient(circle at top left, #020617, #020617 40%, #020617);
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid #1f2937;
+    box-shadow: 0 22px 52px rgba(0, 0, 0, 0.9);
+  }
+
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+    color: #9ca3af;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 0.45rem 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #1f2937;
+    background: #020617;
+    color: #e5e7eb;
+    font-size: 0.9rem;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.55);
+  }
+
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    background: #020617;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 22px 52px rgba(0, 0, 0, 0.95);
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid #111827;
+  }
+
+  .admin-table th {
+    background: #020617;
+    text-align: left;
+    color: #9ca3af;
+  }
+
+  .admin-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+
+  /* IMAGE GRID (detail) */
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .image-grid img {
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid #1f2937;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.95);
+  }
+
+  /* RESPONSIVE CHUNG */
+
+  @media (max-width: 800px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+
+    .admin-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .container {
+      padding-inline: 1rem;
+    }
+  }
+
+  .footer {
+    margin-top: 4rem;
+    padding: 1.5rem 1.5rem;
+    background: linear-gradient(180deg, #060b19 0%, #01030a 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Nếu muốn footer dính sát đáy khi nội dung ngắn */
+  .app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main,
+  .container {
+    flex: 1;
+  }
+
+  /* ==== BOOK VIEWER ==== */
+
+  .account-card {
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    border-radius: 0.9rem;
+    overflow: hidden;
+    border: 1px solid #111827;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .account-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95);
+    border-color: #2563eb;
+  }
+
+  .account-thumb {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+  }
+
+  .account-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .account-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.1),
+      rgba(15, 23, 42, 0.65)
+    );
+  }
+
+  .account-chip-row {
+    position: absolute;
+    left: 0.6rem;
+    bottom: 0.6rem;
+    display: flex;
+    gap: 0.4rem;
+    z-index: 1;
+  }
+
+  .account-chip {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: rgba(15, 23, 42, 0.7);
+    color: #e5e7eb;
+  }
+
+  .account-chip-server {
+    border-color: #38bdf8;
+  }
+
+  .account-chip-rank {
+    border-color: #facc15;
+  }
+
+  .account-body {
+    padding: 0.75rem 0.8rem 0.8rem;
+  }
+
+  .account-desc {
+    font-size: 0.82rem;
+    margin-top: 0.35rem;
+  }
+
+  .account-footer {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .account-link {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f97316, #facc15);
+    color: #0b1120;
+    font-weight: 600;
+    box-shadow: 0 10px 24px rgba(248, 165, 66, 0.7);
+  }
+
+  /* ==== GALLERY GRID ==== */
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 32px;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .gallery-card {
+    background: radial-gradient(circle at top left, #0f172a, #020617);
+    border-radius: 1.1rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+    transition: 0.28s ease;
+    cursor: pointer;
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-7px) scale(1.02);
+    box-shadow: 0 32px 85px rgba(0, 0, 0, 0.95);
+    border-color: #2563eb;
+  }
+
+  .gallery-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+
+  .gallery-card-body {
+    padding: 0.9rem 1rem 1.1rem;
+  }
+
+  .gallery-card-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .gallery-card-sub {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #9ca3af;
+  }
+
+  .gallery-card-link {
+    margin-top: 10px;
+    display: inline-block;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f97316, #facc15);
+    color: #0b1120;
+    font-weight: 600;
+    box-shadow: 0 12px 28px rgba(248, 165, 66, 0.6);
+  }
+
+  .gallery-card-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(248, 165, 66, 0.85);
+  }
+
+  @media (max-width: 1280px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 960px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ==== ACCOUNT DETAIL ==== */
+
+  .detail-section {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .detail-title {
+    margin: 0 0 0.4rem;
+    font-size: 1.6rem;
+    color: #f9fafb;
+  }
+
+  .detail-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid #1f2937;
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+  }
+
+  .badge-server {
+    border-color: #38bdf8;
+  }
+
+  .badge-rank {
+    border-color: #facc15;
+  }
+
+  .badge-count {
+    border-color: #6b7280;
+  }
+
+  .detail-back-link {
+    font-size: 0.82rem;
+    color: #9ca3af;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid #1f2937;
+    background: rgba(15, 23, 42, 0.8);
+  }
+
+  .detail-back-link:hover {
+    color: #e5e7eb;
+    border-color: #2563eb;
+  }
+
+  .detail-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .detail-info-card,
+  .detail-cover-card {
+    background: radial-gradient(circle at top, #020617, #020617 40%, #020617);
+    border-radius: 1rem;
+    border: 1px solid #111827;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+    padding: 1rem 1.1rem 1.1rem;
+  }
+  .detail-cover-card--full {
+    padding: 0;                /* bỏ padding để ảnh sát mép */
+    background: none;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .detail-cover-card--full img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;         /* cho ảnh lấp đầy khung */
+    border-radius: inherit;
+  }
+  .detail-info-card h3,
+  .detail-cover-card h3 {
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+    font-size: 1.05rem;
+  }
+
+  .detail-info-card dl {
+    margin: 0 0 0.7rem;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.25rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #0b1120;
+  }
+
+  .detail-row:last-child {
+    border-bottom: none;
+  }
+
+  .detail-row dt {
+    color: #9ca3af;
+  }
+
+  .detail-row dd {
+    margin: 0;
+    color: #e5e7eb;
+  }
+
+  .detail-info-card h4 {
+    margin: 0.4rem 0 0.25rem;
+    font-size: 0.95rem;
+  }
+
+  .detail-description {
+    font-size: 0.9rem;
+    color: #cbd5f5;
+    line-height: 1.6;
+  }
+
+  .detail-disclaimer {
+    margin-top: 0.7rem;
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+
+  .detail-cover-thumb {
+    border-radius: 0.9rem;
+    overflow: hidden;
+    border: 1px solid #1f2937;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9);
+  }
+
+  .detail-cover-thumb img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .detail-gallery-wrapper {
+    margin-top: 1rem;
+  }
+
+  .detail-gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .detail-gallery-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .detail-gallery-count {
+    font-size: 0.8rem;
+    color: #9ca3af;
+  }
+
+  .detail-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.9rem;
+  }
+
+  /* Ảnh phụ: chỉ còn ảnh, không khung dày */
+  .detail-image-card {
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+    border-radius: 0.85rem;
+    overflow: hidden;
+  }
+
+  .detail-image-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+  }
+
+  @media (max-width: 900px) {
+    .detail-main {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .detail-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .detail-back-link {
+      align-self: flex-end;
+    }
+  }
+
+  /* ==== IMAGE VIEWER (PHÓNG TO) ==== */
+
+  .image-viewer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 80;
+  }
+
+  /* Khung tổng thể ở giữa màn */
+  .image-viewer-inner {
+    position: relative;
+    max-width: 96vw;
+    max-height: 92vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Khung bo tròn bao quanh ảnh/gif/video */
+  .image-viewer-frame {
+    padding: 14px;
+    border-radius: 26px;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.35), transparent 60%),
+      radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.25), transparent 55%),
+      #020617;
+    border: 1px solid rgba(148, 163, 184, 0.55);
+    box-shadow:
+      0 28px 80px rgba(0, 0, 0, 0.95),
+      0 0 40px rgba(15, 23, 42, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Media bên trong (ảnh / gif / video / iframe) */
+  .image-viewer-media {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 20px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Nút đóng ở góc trên bên phải */
+  .image-viewer-close {
+    position: absolute;
+    top: 22px;
+    right: 32px;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    background: rgba(15, 23, 42, 0.96);
+    color: #e5e7eb;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  }
+
+  .image-viewer-close:hover {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    border-color: rgba(125, 211, 252, 0.9);
+    color: #0b1120;
+  }
+
+  /* ==== COLLECTIONS PAGE – CHỌN SERVER ==== */
+
+  .collections-header {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+
+  .collections-header h2 {
+    font-size: 1.6rem;
+  }
+
+  /* ==== COLLECTIONS PAGE – CHỌN SERVER ==== */
+
+  .collections-layout {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 56px;
+    flex-wrap: wrap;
+  }
+
+  /* CARD poster chính */
+  .collection-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 22px;
+
+    position: relative;
+    transform-origin: center center;
+
+    /* không nghiêng nữa, chỉ để dùng scale/translate */
+    transition:
+      transform 0.28s ease,
+      box-shadow 0.28s ease,
+      filter 0.28s ease;
+  }
+
+  /* ánh sáng glow phía sau */
+  .collection-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 26px;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(59,130,246,.35), transparent 60%),
+      radial-gradient(circle at 100% 0%, rgba(56,189,248,.3), transparent 55%);
+    opacity: 0;
+    filter: blur(10px);
+    z-index: -1;
+    transition: opacity 0.28s ease;
+  }
+
+  /* khung ảnh */
+  .collection-img-wrapper {
+    width: 280px;
+    height: 420px;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 26px 70px rgba(0, 0, 0, 0.9);
+  }
+
+  /* ảnh bên trong – cho effect phóng to nhẹ khi hover */
+  .collection-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease, filter 0.35s ease;
+  }
+
+  /* Hover: card nhấc lên + scale nhẹ, không nghiêng */
+  .collection-card:hover {
+    transform: translateY(-18px) scale(1.03);
+    filter: brightness(1.03);
+  }
+
+  .collection-card:hover::before {
+    opacity: 1;
+  }
+
+  .collection-card:hover .collection-img {
+    transform: scale(1.06);
+    filter: saturate(1.1);
+  }
+
+  /* Nút truy cập */
+  .collection-cta {
+    margin-top: 16px;
+    padding: 12px 0;
+    width: 86%;
+    text-align: center;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    border-radius: 14px;
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    border: 1px solid rgba(125, 211, 252, 0.9);
+
+    color: #0b1120;
+    box-shadow: 0 12px 35px rgba(56, 189, 248, 0.55);
+
+    transition: 0.2s ease;
+  }
+
+  .collection-cta:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.08);
+    box-shadow: 0 18px 50px rgba(56, 189, 248, 0.9);
+  }
+
+  /* ===== ADMIN PAGE V2 ===== */
+
+  .admin-page {
+    margin-top: 0.5rem;
+  }
+
+  .admin-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .admin-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .admin-section {
+    margin-top: 1.5rem;
+  }
+
+  .admin-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+  }
+
+  .admin-section-sub {
+    margin: 0 0 0.8rem;
+    font-size: 0.86rem;
+    color: #9ca3af;
+  }
+
+  /* --- STAT CARDS --- */
+
+  .admin-stat-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.9rem;
+  }
+
+  .admin-stat-card {
+    position: relative;
+    padding: 0.9rem 1rem;
+    border-radius: 0.9rem;
+    background: radial-gradient(circle at top, #020617, #020617 50%, #020617);
+    border: 1px solid #111827;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.9);
+  }
+
+  .admin-stat-card--accent {
+    background: radial-gradient(circle at top, #1d4ed8, #020617);
+    border-color: rgba(96, 165, 250, 0.8);
+  }
+
+  .admin-stat-label {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-bottom: 0.25rem;
+  }
+
+  .admin-stat-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f9fafb;
+  }
+
+  .admin-stat-foot {
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: #cbd5f5;
+  }
+
+  /* --- PANELS --- */
+
+  .admin-panel {
+    background: radial-gradient(circle at top left, #020617, #020617 40%, #020617);
+    border-radius: 1rem;
+    border: 1px solid #111827;
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.95);
+    padding: 1rem 1.1rem 1.2rem;
+  }
+
+  .admin-panel-title {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .admin-panel-desc {
+    margin: 0 0 0.8rem;
+    font-size: 0.82rem;
+    color: #9ca3af;
+  }
+
+  /* layout 2 cột giống cũ */
+
+  .admin-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr);
+    gap: 1.3rem;
+    margin-top: 0.6rem;
+  }
+
+  .admin-table-wrapper {
+    margin-top: 0.4rem;
+    border-radius: 0.9rem;
+    overflow: hidden;
+  }
+
+  /* nút nhỏ trong bảng */
+
+  .admin-actions-cell {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .admin-btn-small {
+    border-radius: 999px;
+    padding: 0.28rem 0.8rem;
+    font-size: 0.8rem;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #f97316, #facc15);
+    color: #0b1120;
+    font-weight: 600;
+    box-shadow: 0 10px 24px rgba(248, 165, 66, 0.7);
+  }
+
+  .admin-btn-small:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+  }
+
+  .admin-btn-danger {
+    background: linear-gradient(135deg, #f97373, #facc15);
+  }
+
+  @media (max-width: 900px) {
+    .admin-header-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .admin-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .admin-actions {
+      align-self: flex-end;
+    }
+  }
+
+
+  /* ==== PAGE TRANSITION ==== */
+  .page-slide-in {
+    animation: pageSlideIn 0.4s ease-out;
+  }
+
+  @keyframes pageSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+  /* ==== POPUP CHỌN DANH MỤC COLLECTION – VERSION PRO ==== */
+
+  .select-type-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.95));
+    backdrop-filter: blur(14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 80;
+  }
+
+  .select-type-box {
+    width: 380px;
+    max-width: 92vw;
+    padding: 24px 26px 20px;
+    border-radius: 18px;
+    background: radial-gradient(circle at top, #020617, #020617 50%, #020617);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    box-shadow:
+      0 26px 70px rgba(0, 0, 0, 0.95),
+      0 0 40px rgba(56, 189, 248, 0.18);
+    text-align: center;
+    position: relative;
+  }
+
+  /* chip nhỏ phía trên tiêu đề */
+  .select-type-chip {
+    display: inline-block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(56, 189, 248, 0.7);
+    color: #93c5fd;
+  }
+
+  .select-type-title {
+    margin: 0 0 4px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f9fafb;
+  }
+
+  .select-type-sub {
+    margin: 0 0 18px;
+    font-size: 0.85rem;
+    color: #9ca3af;
+  }
+
+  /* nhóm 2 nút chính */
+  .select-type-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .select-type-btn {
+    width: 100%;
+    padding: 11px 0;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    color: #0b1120;
+    box-shadow: 0 14px 32px rgba(56, 189, 248, 0.7);
+
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  }
+
+  .select-type-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow: 0 22px 55px rgba(56, 189, 248, 0.9);
+  }
+
+  /* nút đóng dạng link nhỏ bên dưới */
+  .select-type-close-link {
+    margin-top: 18px; 
+    border: none;
+    background: none;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  .select-type-close-link:hover {
+    color: #e5e7eb;
+  }
+
+  .gallery-tabs {
+    display: flex;
+    gap: 14px;
+    margin: 12px 0 28px;
+    justify-content: center;
+  }
+
+  .gallery-tab {
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    color: #cbd5f5;
+    cursor: pointer;
+    transition: 0.2s ease;
+    backdrop-filter: blur(6px);
+  }
+
+  .gallery-tab:hover {
+    border-color: rgba(148, 163, 184, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .gallery-tab.active {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    border-color: rgba(125, 211, 252, 0.9);
+    color: #0b1120;
+    font-weight: 700;
+    box-shadow: 0 12px 32px rgba(56, 189, 248, 0.7);
+    transform: translateY(-2px);
+  }
+  .gallery-grid {
+    animation: fadeIn 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== PAGE CONTAINER ===== */
+  .services-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 24px 72px;
+    color: #e5e7eb;
+  }
+
+  /* ===== HERO ===== */
+  .services-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 960px) {
+    .services-hero {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .services-hero-text {
+    max-width: 640px;
+  }
+
+  .services-kicker {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #60a5fa;
+    margin-bottom: 8px;
+  }
+
+  .services-title {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .services-subtitle {
+    color: #9ca3af;
+    margin-bottom: 18px;
+  }
+
+  .services-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .services-hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    font-size: 0.86rem;
+  }
+
+  .metric-label {
+    display: block;
+    color: #9ca3af;
+  }
+
+  .metric-value {
+    display: block;
+    color: #e5e7eb;
+    font-weight: 500;
+  }
+
+  /* ===== HERO RIGHT PANEL ===== */
+  .services-hero-panel {
+    position: relative;
+    padding: 18px 18px 20px;
+    border-radius: 18px;
+    background: radial-gradient(circle at 0% 0%, rgba(96, 165, 250, 0.45), transparent 60%),
+                rgba(15, 23, 42, 0.97);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    box-shadow:
+      0 18px 55px rgba(15, 23, 42, 0.98),
+      0 0 25px rgba(37, 99, 235, 0.5);
+    backdrop-filter: blur(18px);
+  }
+
+  .hero-panel-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .hero-panel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .hero-mini-card {
+    padding: 10px 11px;
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.98);
+    border: 1px solid rgba(55, 65, 81, 0.9);
+    font-size: 0.85rem;
+  }
+
+  .hero-mini-card h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .hero-mini-card p {
+    color: #9ca3af;
+  }
+
+  .hero-panel-note {
+    font-size: 0.8rem;
+    color: #9ca3af;
+  }
+
+  /* ===== GRID SERVICES SECTION ===== */
+  .services-section {
+    margin-top: 10px;
+    margin-bottom: 40px;
+  }
+
+  .services-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .services-section-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .services-section-header p {
+    max-width: 420px;
+    font-size: 0.92rem;
+    color: #9ca3af;
+  }
+
+  /* ===== GRID ===== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px;
+  }
+
+  /* ===== CARD ===== */
+  .service-card {
+    position: relative;
+    border-radius: 18px;
+    padding: 18px 18px 20px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.28), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(30, 64, 175, 0.25), transparent 55%),
+                rgba(15, 23, 42, 0.97);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(14px);
+    transform-style: preserve-3d;
+    transform: translateY(0);
+    transition:
+      transform 230ms ease,
+      box-shadow 230ms ease,
+      border-color 230ms ease,
+      opacity 230ms ease;
+  }
+
+  /* ============ NEW: DIM & HIGHLIGHT EFFECT ============ */
+  /* Khi hover vào grid thì toàn bộ card mờ */
+  .services-grid:hover .service-card {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+
+  /* Card đang được hover -> sáng + nổi bật */
+  .services-grid .service-card:hover {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.02);
+    box-shadow:
+      0 28px 70px rgba(15, 23, 42, 0.98),
+      0 0 40px rgba(59, 130, 246, 0.9);
+    border-color: rgba(96, 165, 250, 0.9);
+  }
+
+  /* Title đổi màu khi hover */
+  .service-card-title {
+    color: #e5e7eb;
+    transition: color 200ms ease;
+  }
+
+  .service-card:hover .service-card-title {
+    color: #bfdbfe;
+  }
+
+  /* Gạch chân tự động */
+  .service-card-header {
+    position: relative;
+    padding-bottom: 4px;
+  }
+
+  .service-card-header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #60a5fa, #a855f7);
+    transition: width 220ms ease;
+  }
+
+  .service-card:hover .service-card-header::after {
+    width: 40%;
+  }
+
+  /* ===== CARD CONTENT ===== */
+  .service-card-subtitle {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-top: 2px;
+  }
+
+  .service-card-desc {
+    margin-top: 10px;
+    font-size: 0.94rem;
+    color: #d1d5db;
+  }
+
+  .service-card-footer {
+    margin-top: 14px;
+  }
+
+  .service-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.6);
+  }
+
+  /* ===== FORM SECTION ===== */
+  .services-contact {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 28px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 960px) {
+    .services-contact {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .services-contact-left {
+    padding: 24px;
+    border-radius: 22px;
+    background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.35), transparent 55%),
+                rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow: 0 18px 55px rgba(15, 23, 42, 0.95);
+  }
+  .service-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+  }
+
+  .service-modal {
+    width: 100%;
+    max-width: 520px;
+    background: rgba(15, 23, 42, 0.98);
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    padding: 20px 22px 18px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.98);
+  }
+
+  .service-modal h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .service-modal-desc {
+    font-size: 0.95rem;
+    color: #d1d5db;
+    margin-bottom: 12px;
+  }
+
+  .service-modal-media img {
+    width: 100%;
+    border-radius: 14px;
+    margin-bottom: 10px;
+  }
+
+  .service-modal-link a {
+    font-size: 0.9rem;
+    color: #93c5fd;
+    text-decoration: underline;
+  }
+
+  .service-modal-empty {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-bottom: 10px;
+  }
+  /* BACKDROP TỐI */
+
+  /* ==== SERVICES MODAL GALLERY ==== */
+
+  /* Lớp bọc modal – full màn hình */
+  .gallery-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+  }
+
+  /* Nền mờ phía sau */
+  .gallery-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+  }
+
+  /* Khung chính ở giữa màn hình */
+  /* Khung modal chính */
+  /* ====== MODAL GALLERY – DESKTOP ====== */
+  /* ====== MODAL GALLERY – DESKTOP ====== */
+  /* ====== MODAL GALLERY – DESKTOP ====== */
+ /* ==== MODAL GALLERY – DESKTOP ==== */
+
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* Khung modal chính */
+/* Khung modal chính */
+.gallery-content-grid {
+  position: relative;           /* để .gallery-close absolute theo nó */
+  width: 95%;
+  max-width: 1400px;
+  max-height: 85vh;
+  background: #020617;
+  border-radius: 20px;
+  padding: 20px 24px 40px;      /* thêm padding-right cho nút X */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* GRID bên trong modal */
+.gallery-modal .gallery-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* Bóng mờ ở đáy khi scroll tới cuối */
+.gallery-content-grid::after {
+  content: "";
+  display: block;
+  height: 30px;
+  margin-top: 10px;
+  background: linear-gradient(to bottom, transparent, rgba(2, 6, 23, 0.8));
+  border-radius: 0 0 18px 18px;
+  pointer-events: none;
+}
+
+/* Nút X ở góc phải, dính khi scroll */
+/* FIX: căn giữa dấu X trong nút đóng modal */
+
+.gallery-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.6);
+  background: radial-gradient(circle at 30% 0%, rgba(248,250,252,0.12), transparent 55%),
+              rgba(15,23,42,0.96);
+  color: #e5e7eb;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  line-height: 1;          /* 👈 không cho line-height đẩy X xuống */
+  padding: 0;              /* 👈 tránh padding làm lệch */
+}
+
+/* Nếu vẫn thấy X hơi tụt, kéo lên 1px cho chuẩn */
+.gallery-close span,
+.gallery-close svg,
+.gallery-close::before {
+  position: relative;
+  top: -1px;               /* tăng/giảm -2px, -0.5px tuỳ mắt bạn */
+}
+
+.gallery-close:hover {
+  border-color: rgba(96,165,250,0.95);
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #020617;
+  transform: translateY(-1px);
+}
+
+/* MOBILE: full màn / 1–2 cột */
+@media (max-width: 768px) {
+  .gallery-content-grid {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 12px 10px 20px;
+  }
+
+  .gallery-modal .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Bot Discord bundle – chỉ thêm margin dưới nhẹ */
+.bot-discord-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+  /* Lưới trong modal – desktop */
+  .gallery-modal .gallery-grid {
+    margin-top: 10px;
+    flex: 1;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  /* ===== MOBILE: full-screen + dọc 1 cột ===== */
+  @media (max-width: 768px) {
+    .gallery-content-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: none;
+
+      width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+
+      border-radius: 0;
+      padding: 12px 10px 20px;
+
+      overflow-y: auto;   /* kéo dọc trong modal */
+      overflow-x: hidden;
+    }
+
+    /* 🔥 CHỈ modal dùng dạng dọc 1 cột */
+    .gallery-modal .gallery-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .gallery-modal .gallery-grid .gallery-grid-item {
+      width: 100%;
+    }
+
+    .gallery-modal .gallery-grid .gallery-grid-item img,
+    .gallery-modal .gallery-grid .gallery-grid-item video,
+    .gallery-modal .gallery-grid .gallery-grid-item iframe {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+
+  /* MOBILE LAYOUT CHO MODAL GALLERY */
+  @media (max-width: 768px) {
+    .gallery-content-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: none;
+      width: 100vw;
+      height: 100vh;
+      max-height: 100vh;
+      border-radius: 0;
+      padding: 10px 10px 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* grid 2 cột thumbnail */
+    .gallery-modal .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .gallery-grid-item {
+      padding: 6px;
+      border-radius: 12px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+    }
+
+    .gallery-grid-item img,
+    .gallery-grid-item video,
+    .gallery-grid-item iframe {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    /* text dưới thumbnail (nếu cần) */
+    .gallery-grid-item-title {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: #e5e7eb;
+      text-align: center;
+    }
+  }
+
+
+  /* ==== SCROLLBAR UI SANG XỊN MỊN ==== */
+
+  /* thanh cuộn tổng */
+  .gallery-modal .gallery-grid::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  /* background của thanh cuộn */
+  .gallery-modal .gallery-grid::-webkit-scrollbar-track {
+    background: rgba(2, 6, 23, 0.6);
+    border-radius: 20px;
+    margin: 6px;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    box-shadow: inset 0 0 14px rgba(56, 189, 248, 0.1);
+  }
+
+  /* thanh kéo */
+  .gallery-modal .gallery-grid::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #38bdf8, #0ea5e9);
+    border-radius: 20px;
+    border: 2px solid rgba(2, 6, 23, 0.8);
+    box-shadow:
+      0 0 10px rgba(56, 189, 248, 0.7),
+      0 0 20px rgba(14, 165, 233, 0.4);
+    transition: 0.2s ease;
+  }
+
+  /* hover – sáng hơn */
+  .gallery-modal .gallery-grid::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #0ea5e9, #38bdf8);
+    box-shadow:
+      0 0 14px rgba(59, 130, 246, 0.9),
+      0 0 26px rgba(14, 165, 233, 0.7);
+  }
+
+
+ /* Khung modal chính */
+.gallery-content-grid {
+  position: relative;           /* để .gallery-close absolute theo nó */
+  width: 95%;
+  max-width: 1400px;
+  max-height: 85vh;
+  background: #020617;
+  border-radius: 20px;
+  padding: 20px 24px 40px;      /* thêm padding-right cho nút X */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Nút X – luôn nằm gọn trong khung, không tràn ra ngoài */
+.gallery-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.6);
+  background: radial-gradient(circle at 30% 0%, rgba(248,250,252,0.12), transparent 55%),
+              rgba(15,23,42,0.96);
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 14px 30px rgba(0,0,0,0.6);
+  transition: 0.18s ease;
+}
+
+.gallery-close:hover {
+  border-color: rgba(96,165,250,0.95);
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #020617;
+  transform: translateY(-1px);
+}
+
+/* Tắt viền xanh focus khó chịu */
+.gallery-close:focus-visible,
+.gallery-content-grid:focus-visible {
+  outline: none;
+}
+
+  /* Tiêu đề + mô tả trên cùng */
+  .gallery-title {
+    margin: 0;
+    padding-right: 40px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #f9fafb;
+  }
+
+  .gallery-desc {
+    margin-top: 4px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #9ca3af;
+  }
+
+  /* TEXT KHI CHƯA CÓ DEMO */
+  .service-modal-empty {
+    padding: 40px 0;
+    text-align: center;
+    color: #9ca3af;
+  }
+
+  
+
+  /* CARD BÊN NGOÀI – giống hình bạn gửi */
+  .gallery-grid-item {
+    position: relative;
+    background: radial-gradient(circle at top, rgba(30, 41, 59, 0.95), #020617);
+    border-radius: 18px;
+    padding: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65);
+    transition: 0.18s ease-out;
+
+    height: auto;       /* 🔥 không kéo cho bằng chiều cao hàng */
+  }
+
+  /* Hiệu ứng hover cho “quốc tế” hơn */
+  .gallery-grid-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 18px 48px rgba(56, 189, 248, 0.5);
+    border-color: rgba(96, 165, 250, 0.8);
+  }
+
+  /* MEDIA BÊN TRONG – luôn là hình chữ nhật ngang giống card */
+  .gallery-grid-item img,
+  .gallery-grid-item video,
+  .gallery-grid-item iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;       /* CHỮ NHẬT NGANG */
+    border-radius: 14px;
+    object-fit: cover;
+    display: block;
+    border: none;
+    background: black;
+  }
+
+
+  /* ==== FULLVIEW MODAL (MEDIA ZOOM) ==== */
+
+  .media-viewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+  }
+
+  .media-viewer-inner {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 22px;
+
+    /* KHUNG + VIỀN */
+    background: rgba(15,23,42,0.85);
+    padding: 14px;
+
+    border: 1px solid rgba(148,163,184,0.45);
+    box-shadow:
+      0 0 0 3px rgba(56,189,248,0.35),
+      0 0 40px rgba(56,189,248,0.45),
+      0 25px 80px rgba(0,0,0,0.8);
+  }
+
+  .media-viewer-inner img,
+  .media-viewer-inner video {
+    width: 100%;
+    height: auto;
+    max-height: 82vh;
+    border-radius: 18px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .media-viewer-close {
+    position: absolute;
+    top: -46px;
+    right: 0;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(15,23,42,0.9);
+    border: 1px solid rgba(148,163,184,0.4);
+    color: #e5e7eb;
+    cursor: pointer;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+  }
+
+  .media-viewer-close:hover {
+    background: #1d4ed8;
+    border-color: #60a5fa;
+  }
+
+  .admin-readonly-field {
+    padding: 0.55rem 0.7rem;
+    border-radius: 0.5rem;
+    border: 1px solid #1f2937;
+    background: #020617;
+    color: #e5e7eb;
+    font-size: 0.9rem;
+  }
+
+  .admin-readonly-multiline {
+    min-height: 80px;
+    white-space: pre-line;
+  }
+
+
+
+  .body-no-scroll {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+
+
+  /* ==== PREVIEW MEDIA TRONG ADMIN – GRID NHỎ GỌN ==== */
+
+  /* hộp chứa toàn bộ ảnh demo */
+  .demo-images-preview,
+  .demo-videos-preview {
+    margin-top: 8px;
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+
+    /* xếp dạng lưới thumbnail */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+
+    /* không chiếm quá nhiều chiều cao panel */
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
+  /* từng ô preview */
+  .preview-item {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #020617;
+    border: 1px solid rgba(30, 64, 175, 0.55);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ảnh & video bên trong – THUMBNAIL, không full chiều cao */
+  .preview-item img,
+  .preview-item video {
+    width: 100%;
+    height: 110px;           /* chỉnh thấp/cao tuỳ ý */
+    object-fit: cover;
+    display: block;
+  }
+
+  /* nút Xóa overlay trên góc */
+  .preview-item .admin-btn-small {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    font-size: 11px;
+    padding: 3px 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.7);
+  }
+  /* 3 cột: Form – Preview – Bảng */
+  .admin-layout--3cols {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) minmax(0, 1.4fr);
+  }
+
+  /* Panel preview ở giữa */
+  .admin-preview-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin-preview-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-bottom: 8px;
+  }
+
+  /* khu vực scroll riêng cho list ảnh / video */
+  .admin-preview-scroll {
+    margin-top: 4px;
+    padding-right: 4px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  /* grid ảnh / video */
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  /* card nhỏ cho mỗi ảnh/video */
+  .preview-item {
+    background: #020617;
+    border-radius: 0.6rem;
+    border: 1px solid #111827;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.9);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .preview-item img,
+  .preview-item video {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 0.45rem;
+  }
+
+  /* responsive: dưới 900px vẫn về 1 cột như cũ */
+  @media (max-width: 900px) {
+    .admin-layout--3cols {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  .music-indicator {
+    position: fixed;
+    left: 24px;
+    bottom: 22px;
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.88);
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+    font-size: 0.85rem;
+    color: #e5e7eb;
+    backdrop-filter: blur(10px);
+  }
+
+  .music-indicator-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: #4b5563;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    transition: 0.25s ease;
+  }
+
+  .music-indicator-dot--on {
+    background: #22c55e;
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.35);
+  }
+
+  .music-indicator-text {
+    white-space: nowrap;
+  }
+
+  .music-indicator-hint {
+    color: #9ca3af;
+  }
+
+  /* ============================================
+    📱 MOBILE RESPONSIVE SYSTEM — GTA5VN
+    ============================================ */
+
+  /* ----- Toàn trang ----- */
+  @media (max-width: 1200px) {
+    .container {
+      padding: 1rem;
+    }
+  }
+
+  /* ----- Navbar ----- */
+  @media (max-width: 800px) {
+    .navbar {
+      flex-direction: column;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .navbar-right {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .navbar-right a,
+    .navbar-right button {
+      padding: 6px 14px;
+    }
+  }
+
+  /* ----- Collections Page ----- */
+  @media (max-width: 760px) {
+    .collections-layout {
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .collection-card {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .collection-img-wrapper {
+      height: 340px;
+    }
+  }
+
+
+  @media (max-width: 480px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ----- Account Cards ----- */
+  @media (max-width: 768px) {
+    .grid,
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .grid,
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ----- Account Detail ----- */
+  @media (max-width: 860px) {
+    .detail-main {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ----- Admin Layout ----- */
+  @media (max-width: 1080px) {
+    .admin-layout--3cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 780px) {
+    .admin-layout--3cols {
+      grid-template-columns: 1fr;
+    }
+
+    .admin-panel {
+      margin-bottom: 20px;
+    }
+  }
+
+
+
+  /* ===== PREMIUM PANEL – KHUNG ĐẸP CHUẨN QUỐC TẾ ===== */
+
+  .gta-panel {
+    position: relative;
+    background: radial-gradient(circle at top left,
+                rgba(58, 114, 255, 0.18),
+                rgba(15, 23, 42, 0.98));
+    border-radius: 18px;
+    padding: 22px 24px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow:
+      0 25px 60px rgba(0, 0, 0, 0.85),
+      0 0 40px rgba(56, 189, 248, 0.12);
+    backdrop-filter: blur(14px);
+
+    transition: 0.25s ease-out;
+  }
+
+  /* Hiệu ứng viền sáng khi hover */
+  .gta-panel:hover {
+    border-color: rgba(125, 211, 252, 0.9);
+    box-shadow:
+      0 32px 80px rgba(0, 0, 0, 0.95),
+      0 0 55px rgba(56, 189, 248, 0.25);
+    transform: translateY(-3px);
+  }
+
+  /* Tiêu đề trong panel */
+  .gta-panel-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 8px;
+  }
+
+  /* Mô tả nhỏ */
+  .gta-panel-sub {
+    font-size: 0.88rem;
+    color: #94a3b8;
+    margin-bottom: 16px;
+  }
+
+  /* Nội dung chia dòng */
+  .gta-panel-content {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    line-height: 1.55;
+  }
+
+
+  /* ============================================
+    🔥 ACCOUNT DETAIL – GTA5VN PREMIUM STYLE V2
+    ============================================ */
+
+  /* Layout tổng */
+  .detail-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 18px 120px;
+    color: #e5e7eb;
+  }
+
+  /* ============================
+    HEADER + BADGES
+    ============================ */
+
+  .detail-headerX {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .detail-titleX {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    color: #f9fafb;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+
+  .detail-badgesX {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  .badgeX {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    background: rgba(15,23,42,0.85);
+    border: 1px solid rgba(148,163,184,0.3);
+    backdrop-filter: blur(8px);
+  }
+
+  .badgeX.blue {
+    border-color: #3b82f6;
+    color: #93c5fd;
+  }
+
+  .badgeX.gold {
+    border-color: #facc15;
+    color: #fde047;
+  }
+
+  .badgeX.gray {
+    border-color: #64748b;
+    color: #cbd5e1;
+  }
+
+  .back-btnX {
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(148,163,184,0.35);
+    background: rgba(15,23,42,0.85);
+    color: #93c5fd;
+    text-decoration: none;
+    transition: 0.2s ease;
+  }
+
+  .back-btnX:hover {
+    border-color: #3b82f6;
+    color: #fff;
+  }
+
+  /* ============================
+    INFO + MAIN IMAGE
+    ============================ */
+
+  .detail-mainX {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.7fr);
+    gap: 28px;
+    margin-bottom: 36px;
+  }
+
+  @media (max-width: 900px) {
+    .detail-mainX {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* PANEL CHUẨN GTA5VN */
+  .gta-panel {
+    background: radial-gradient(circle at top left, #0f172a, #020617 60%);
+    border-radius: 18px;
+    padding: 20px 22px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.8);
+  }
+
+  .gta-panel-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+
+  .gta-panel-title.small {
+    margin-top: 14px;
+    font-size: 1rem;
+  }
+
+  .gta-panel-sub {
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+
+  .gta-info-grid {
+    margin-top: 12px;
+  }
+
+  .rowX {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #0b1120;
+    font-size: 0.92rem;
+  }
+
+  .rowX span {
+    color: #94a3b8;
+  }
+
+  .gta-panel-content {
+    font-size: 0.9rem;
+    color: #d1d5db;
+  }
+
+  .detail-disclaimerX {
+    margin-top: 14px;
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+
+  /* ============================
+    MAIN IMAGE
+    ============================ */
+
+  .main-imageX {
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid rgba(148,163,184,0.35);
+    box-shadow: 0 22px 50px rgba(0,0,0,0.85);
+    transition: 0.2s ease;
+  }
+
+  .main-imageX:hover {
+    transform: translateY(-3px);
+    border-color: #60a5fa;
+    box-shadow: 0 30px 70px rgba(56,189,248,0.5);
+  }
+
+  .main-imageX img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ============================
+    SUB IMAGES GALLERY
+    ============================ */
+
+  .gallery-panelX {
+    margin-top: 32px;
+  }
+
+  .detail-galleryX {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+    gap: 16px;
+  }
+
+  .thumbX {
+    padding: 0;
+    border: none;
+    background: none;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid rgba(148,163,184,0.25);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.65);
+    transition: 0.2s ease;
+  }
+
+  .thumbX:hover {
+    transform: translateY(-3px) scale(1.03);
+    border-color: #60a5fa;
+    box-shadow: 0 18px 40px rgba(56,189,248,0.5);
+  }
+
+  .thumbX img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+  }
+
+  .emptyX {
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  /* ============================
+    FULLSCREEN VIEWER
+    ============================ */
+
+  .viewerX {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+  }
+
+  .viewer-innerX {
+    position: relative;
+    max-width: 92vw;
+    max-height: 90vh;
+    padding: 14px;
+    border-radius: 20px;
+    background: rgba(15,23,42,0.9);
+    border: 1px solid rgba(148,163,184,0.4);
+    box-shadow:
+      0 0 0 3px rgba(56,189,248,0.35),
+      0 0 30px rgba(56,189,248,0.45),
+      0 22px 60px rgba(0,0,0,0.9);
+  }
+
+  .viewer-innerX img {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    border-radius: 18px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .viewer-closeX {
+    position: absolute;
+    top: -46px;
+    right: 0;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    background: rgba(15,23,42,0.9);
+    border: 1px solid rgba(148,163,184,0.4);
+    color: #e5e7eb;
+    cursor: pointer;
+  }
+
+  .viewer-prevX,
+  .viewer-nextX {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.6rem;
+    color: #e5e7eb;
+    padding: 0 14px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    opacity: 0.8;
+    transition: 0.15s ease;
+  }
+
+  .viewer-prevX:hover,
+  .viewer-nextX:hover {
+    opacity: 1;
+    color: #60a5fa;
+  }
+
+  .viewer-prevX {
+    left: -48px;
+  }
+
+  .viewer-nextX {
+    right: -48px;
+  }
+
+  .viewer-countX {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #cbd5f5;
+  }
+
+  /* Disable scroll behind viewer */
+  .body-no-scroll {
+    overflow: hidden;
+    height: 100vh;
+  }
+
+
+  .gallery-filter {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .gallery-filter-select {
+    width: 320px;
+    padding: 10px 14px;
+    background: rgba(15, 25, 48, 0.8);
+    border: 1px solid rgba(79, 120, 255, 0.45);
+    border-radius: 8px;
+    color: #dce7ff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.25s ease;
+    backdrop-filter: blur(6px);
+  }
+
+  .gallery-filter-select:hover {
+    border-color: #7fa1ff;
+  }
+
+  .gallery-filter-select:focus {
+    border-color: #4f78ff;
+    box-shadow: 0 0 8px rgba(79, 120, 255, 0.5);
+  }
+  .admin-filter-row {
+    margin-top: 8px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .admin-filter-select {
+    padding: 8px 14px;
+    background: rgba(10, 20, 40, 0.85);
+    border: 1px solid rgba(90, 130, 255, 0.55);
+    border-radius: 8px;
+    font-size: 14px;
+    color: #e3ebff;
+    outline: none;
+    width: 230px;
+    backdrop-filter: blur(6px);
+    transition: 0.25s ease;
+  }
+
+  .admin-filter-select:hover {
+    border-color: #7ea2ff;
+  }
+
+  .admin-filter-select:focus {
+    border-color: #5a85ff;
+    box-shadow: 0 0 8px rgba(80, 120, 255, 0.5);
+  }
+
+
+ /* ============================
+   BUNDLE BOT DISCORD TRONG MODAL
+   ============================ */
+
+.bot-discord-section {
+  margin-top: 20px;
+  padding: 18px 18px 22px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.16), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.14), transparent 55%),
+    rgba(15, 23, 42, 0.97);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.9),
+    0 0 35px rgba(15, 23, 42, 0.9);
+}
+
+.bot-discord-intro {
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  margin-bottom: 14px;
+}
+.bot-discord-intro strong {
+  color: #fde68a;
+}
+
+/* GRID card bot */
+.bot-discord-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+/* Card từng bot */
+.bot-discord-card {
+  position: relative;
+  padding: 16px 16px 14px;
+  border-radius: 16px;
+  background: radial-gradient(circle at top left, #020617, #020617 55%, #020617);
+  border: 1px solid rgba(31, 41, 55, 0.9);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+  transition:
+    transform 0.23s ease,
+    box-shadow 0.23s ease,
+    border-color 0.23s ease,
+    background 0.23s ease;
+}
+
+/* ánh sáng nhẹ trên card */
+.bot-discord-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.22), transparent 55%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* hover: nhấc card + glow xanh */
+.bot-discord-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(96, 165, 250, 0.9);
+  box-shadow:
+    0 26px 72px rgba(0, 0, 0, 1),
+    0 0 32px rgba(37, 99, 235, 0.6);
+}
+.bot-discord-card:hover::before {
+  opacity: 1;
+}
+
+/* tiêu đề + sub */
+.bot-discord-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f9fafb;
+  margin: 0 0 4px;
+}
+.bot-discord-sub {
+  font-size: 0.86rem;
+  color: #9ca3af;
+  margin: 0 0 10px;
+}
+
+/* list chức năng */
+.bot-discord-list {
+  margin: 0;
+  padding-left: 1.1rem;  /* giữ bullet gọn */
+  list-style: disc;
+}
+
+.bot-discord-list li {
+  font-size: 0.86rem;
+  color: #e5e7eb;
+  line-height: 1.5;
+  margin-bottom: 5px;
+}
+
+/* bullet màu xanh nổi hơn */
+.bot-discord-list li::marker {
+  color: #38bdf8;
+}
+
+/* responsive nhỏ hơn */
+@media (max-width: 768px) {
+  .bot-discord-section {
+    padding: 16px 12px 18px;
+  }
+  .bot-discord-card {
+    padding: 14px 12px 12px;
+  }
+}
+
+
+/* FIX: Bot Discord section bị cắt khi scroll xuống cuối modal */
+
+.gallery-content-grid {
+  padding-bottom: 40px !important;   /* thêm khoảng thở dưới */
+}
+
+.bot-discord-section {
+  margin-bottom: 20px;               /* tránh đụng mép modal */
+}
+
+/* Đảm bảo modal không bị cắt góc khi scroll */
+.gallery-modal .gallery-content-grid {
+  max-height: 85vh;                  /* modal cao nhưng có không gian */
+  overflow-y: auto;                  /* scroll mượt */
+  border-radius: 20px;
+  scrollbar-width: thin;
+}
+
+.gallery-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bo góc đẹp cho khung bot */
+.bot-discord-card {
+  border-radius: 16px;
+}
+
+/* tạo bóng nhẹ ở đáy modal khi kéo xuống */
+.gallery-content-grid::after {
+  content: "";
+  display: block;
+  height: 30px;
+  margin-top: 10px;
+  background: linear-gradient(to bottom, transparent, rgba(2,6,23,0.8));
+  border-radius: 0 0 18px 18px;
+  pointer-events: none;
+}
+
+

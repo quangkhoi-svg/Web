@@ -1,6 +1,26 @@
 // backend/src/controllers/accountController.js
 import Account from "../models/Account.js";
 
+// Helper: chuẩn hoá mảng images (nhận string hoặc array)
+function normalizeImages(raw) {
+  if (!raw) return [];
+
+  // Nếu là array sẵn
+  if (Array.isArray(raw)) {
+    return raw.map((x) => String(x).trim()).filter(Boolean);
+  }
+
+  // Nếu là string (ví dụ textarea xuống dòng)
+  if (typeof raw === "string") {
+    return raw
+      .split("\n")
+      .map((x) => x.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
 // GET /api/accounts?server=&section=
 export const getAccounts = async (req, res) => {
   try {
@@ -31,79 +51,44 @@ export const getAccountById = async (req, res) => {
 };
 
 // POST /api/accounts (ADMIN)
+// Frontend gửi: { title, rank, description, mainImage, images, server, section }
 export const createAccount = async (req, res) => {
   try {
-    // Log để debug xem frontend gửi gì
     console.log("👉 createAccount body:", req.body);
 
-    // Dữ liệu “đúng chuẩn”
     const {
-      name,
+      title,
+      rank,
+      description,
+      mainImage,
+      images,
       server,
       section,
-      price,
-      description,
-      thumbnailUrl,
-      bannerGifUrl,
-      galleryImages,
-      isFeatured,
     } = req.body;
 
-    // Dữ liệu kiểu cũ từ form admin (những field có khả năng tồn tại)
-    const legacyTitle = req.body.title;          // tiêu đề
-    const legacyServer = req.body.server;        // server chọn trong form
-    const legacySection = req.body.section;      // danh mục: character / fashion
-    const legacyPrice = req.body.rankPrice;      // hoặc price kiểu string
-    const legacyInfo = req.body.info;            // mô tả
-    const legacyMainImg = req.body.mainImageUrl; // link ảnh chính sau upload
-    const legacyImages = req.body.images;        // mảng link ảnh phụ
-
-    // Gộp lại – ưu tiên field mới, fallback sang field cũ
-    const finalName = name || legacyTitle || "No title";
-    const finalServer = server || legacyServer || "los-santos";
-    const finalSection = section || legacySection || "character";
-
-    let finalPrice = price;
-    if (finalPrice == null && legacyPrice != null) {
-      const p = Number(legacyPrice);
-      finalPrice = Number.isNaN(p) ? 0 : p;
-    }
-
-    const finalDescription = description || legacyInfo || "";
-    const finalThumbnailUrl = thumbnailUrl || legacyMainImg || "";
-    const finalBannerGifUrl = bannerGifUrl || "";
-    const finalGalleryImages =
-      Array.isArray(galleryImages) && galleryImages.length > 0
-        ? galleryImages
-        : Array.isArray(legacyImages)
-        ? legacyImages
-        : [];
-
-    const finalIsFeatured = typeof isFeatured === "boolean" ? isFeatured : false;
-
-    // Nếu vẫn thiếu thì trả về 400 (Bad Request) cho dễ hiểu, không phải 500
-    if (!finalName || !finalServer || !finalSection || finalPrice == null) {
+    // Validate dữ liệu bắt buộc
+    if (!title || !mainImage || !server || !section) {
       return res.status(400).json({
         message: "Thiếu dữ liệu bắt buộc",
         missing: {
-          name: !!finalName,
-          server: !!finalServer,
-          section: !!finalSection,
-          price: finalPrice != null,
+          title: !!title,
+          mainImage: !!mainImage,
+          server: !!server,
+          section: !!section,
         },
       });
     }
 
+    const normalizedImages = normalizeImages(images);
+
     const newAcc = await Account.create({
-      name: finalName,
-      server: finalServer,
-      section: finalSection,
-      price: finalPrice,
-      description: finalDescription,
-      thumbnailUrl: finalThumbnailUrl,
-      bannerGifUrl: finalBannerGifUrl,
-      galleryImages: finalGalleryImages,
-      isFeatured: finalIsFeatured,
+      title,
+      rank,
+      description,
+      mainImage,
+      images: normalizedImages,
+      server,
+      section,
     });
 
     res.status(201).json(newAcc);
@@ -117,30 +102,31 @@ export const createAccount = async (req, res) => {
 export const updateAccount = async (req, res) => {
   try {
     const { id } = req.params;
+
     const {
-      name,
+      title,
+      rank,
+      description,
+      mainImage,
+      images,
       server,
       section,
-      price,
-      description,
-      thumbnailUrl,
-      bannerGifUrl,
-      galleryImages,
-      isFeatured,
     } = req.body;
 
     const acc = await Account.findById(id);
     if (!acc) return res.status(404).json({ message: "Account not found" });
 
-    acc.name = name ?? acc.name;
-    acc.server = server ?? acc.server;
-    acc.section = section ?? acc.section;
-    acc.price = price ?? acc.price;
-    acc.description = description ?? acc.description;
-    acc.thumbnailUrl = thumbnailUrl ?? acc.thumbnailUrl;
-    acc.bannerGifUrl = bannerGifUrl ?? acc.bannerGifUrl;
-    acc.galleryImages = galleryImages ?? acc.galleryImages;
-    acc.isFeatured = isFeatured ?? acc.isFeatured;
+    if (title !== undefined) acc.title = title;
+    if (rank !== undefined) acc.rank = rank;
+    if (description !== undefined) acc.description = description;
+    if (mainImage !== undefined) acc.mainImage = mainImage;
+    if (server !== undefined) acc.server = server;
+    if (section !== undefined) acc.section = section;
+
+    // Chỉ update images nếu FE gửi lên field images
+    if (images !== undefined) {
+      acc.images = normalizeImages(images);
+    }
 
     const updated = await acc.save();
     res.json(updated);

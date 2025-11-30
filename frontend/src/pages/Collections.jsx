@@ -21,24 +21,16 @@ function Collections() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // tạo audio từ public/music/music.mp3
     const audio = new Audio("/music/music.mp3");
     audio.loop = true;
     audio.volume = 0.45;
     audioRef.current = audio;
 
-    // 🔥 thử auto-play ngay khi vào trang
     audio
       .play()
-      .then(() => {
-        setIsMusicPlaying(true); // auto play thành công
-      })
-      .catch((err) => {
-        console.warn("Trình duyệt chặn autoplay, chờ người dùng bấm phím:", err);
-        setIsMusicPlaying(false); // sẽ hiện trạng thái "Đã tắt"
-      });
+      .then(() => setIsMusicPlaying(true))
+      .catch(() => setIsMusicPlaying(false));
 
-    // bấm phím bất kỳ để bật/tắt nhạc
     const handleKeyDown = () => {
       if (!audioRef.current) return;
 
@@ -46,9 +38,7 @@ function Collections() {
         audioRef.current
           .play()
           .then(() => setIsMusicPlaying(true))
-          .catch((err) =>
-            console.warn("Không phát được nhạc khi bấm phím:", err)
-          );
+          .catch(() => {});
       } else {
         audioRef.current.pause();
         setIsMusicPlaying(false);
@@ -66,13 +56,8 @@ function Collections() {
     };
   }, []);
 
-  const openSelectType = (server) => {
-    setSelectedServer(server);
-  };
-
-  const closeSelectType = () => {
-    setSelectedServer(null);
-  };
+  const openSelectType = (server) => setSelectedServer(server);
+  const closeSelectType = () => setSelectedServer(null);
 
   const goTo = (type) => {
     if (!selectedServer) return;
@@ -98,7 +83,13 @@ function Collections() {
           onClick={() => openSelectType("los-santos")}
         >
           <div className="collection-img-wrapper">
-            <img src={lsBg} className="collection-img" alt="Los Santos" />
+            <img
+              src={lsBg}
+              className="collection-img"
+              alt="Los Santos"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
 
           <button
@@ -119,7 +110,13 @@ function Collections() {
           onClick={() => openSelectType("blaine-county")}
         >
           <div className="collection-img-wrapper">
-            <img src={bcBg} className="collection-img" alt="Blaine County" />
+            <img
+              src={bcBg}
+              className="collection-img"
+              alt="Blaine County"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
 
           <button
@@ -138,10 +135,7 @@ function Collections() {
       {/* POPUP chọn Nhân vật / Thời trang */}
       {selectedServer && (
         <div className="select-type-overlay" onClick={closeSelectType}>
-          <div
-            className="select-type-box"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="select-type-box" onClick={(e) => e.stopPropagation()}>
             <div className="select-type-chip">Bộ sưu tập</div>
 
             <h3 className="select-type-title">

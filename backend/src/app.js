@@ -24,26 +24,27 @@ app.use(helmet());
    🌐 CORS: chỉ cho phép domain tin cậy
 ============================ */
 const allowedOrigins = [
-  "http://localhost:5173",                         // dev local (Vite)
-  "https://hilarious-sawine-12b798.netlify.app",  // frontend Netlify của bạn
+  "http://localhost:5173",            // dev local (Vite)
+  "https://ltking.netlify.app",       // ✅ đúng domain Netlify hiện tại
+  // nếu sau này bạn có domain khác thì thêm vào đây
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Request không có origin (Postman, server nội bộ) -> cho phép
+      // Request không có origin (Postman, healthcheck, v.v.) -> cho phép
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
+      console.log("❌ Blocked by CORS:", origin);
       return callback(new Error("Not allowed by CORS"), false);
     },
     credentials: true,
   })
 );
-
 app.use(express.json());
 app.use(morgan("dev"));
 

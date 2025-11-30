@@ -23,7 +23,8 @@ function AccountCard({ account }) {
 
         <p className="card-text">{account.description}</p>
 
-        <Link className="card-link" to={`/accounts/${account.id}`}>
+        {/* 🔥 SỬA Ở ĐÂY: dùng _id thay vì id */}
+        <Link className="card-link" to={`/accounts/${account._id || account.id}`}>
           Xem chi tiết
         </Link>
       </div>

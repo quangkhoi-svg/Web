@@ -1,13 +1,27 @@
 // src/services/api.js
-const API_BASE_URL = "https://gta5vn-backend.onrender.com/api";
 
-// Lấy token admin từ localStorage để gửi lên backend
+// ==============================================
+// API BASE URL
+// ==============================================
+// ƯU TIÊN lấy từ biến môi trường VITE_API_URL
+// Nếu không có thì mặc định dùng backend LOCAL
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+
+// Debug xem frontend đang gọi API nào (bạn có thể xoá sau)
+console.log("👉 API BASE:", API_BASE_URL);
+
+// ==============================================
+// TOKEN ADMIN
+// ==============================================
 const getAuthHeaders = () => {
   const token = localStorage.getItem("gta5vnAdminToken");
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-// ===== LOGIN ADMIN =====
+// ==============================================
+// ADMIN LOGIN
+// ==============================================
 export async function adminLogin(username, password) {
   const res = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
@@ -20,23 +34,39 @@ export async function adminLogin(username, password) {
     throw new Error(err.message || "Đăng nhập thất bại");
   }
 
-  return res.json(); // ví dụ: { token: "gta5vn-gallery-token" }
+  return res.json();
 }
 
-// ===== PUBLIC GET =====
+// ==============================================
+// PUBLIC API
+// ==============================================
 export async function fetchAccounts(query = "") {
   const res = await fetch(`${API_BASE_URL}/accounts${query}`);
-  if (!res.ok) throw new Error("Failed to fetch accounts");
+
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error("❌ fetchAccounts error:", txt);
+    throw new Error("Failed to fetch accounts");
+  }
+
   return res.json();
 }
 
 export async function fetchAccountById(id) {
   const res = await fetch(`${API_BASE_URL}/accounts/${id}`);
-  if (!res.ok) throw new Error("Failed to fetch account");
+
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error("❌ fetchAccountById error:", txt);
+    throw new Error("Failed to fetch account");
+  }
+
   return res.json();
 }
 
-// ===== ADMIN ONLY – cần token =====
+// ==============================================
+// ADMIN CRUD
+// ==============================================
 export async function createAccount(data) {
   const res = await fetch(`${API_BASE_URL}/accounts`, {
     method: "POST",
@@ -46,7 +76,13 @@ export async function createAccount(data) {
     },
     body: JSON.stringify(data),
   });
-  if (!res.ok) throw new Error("Failed to create account");
+
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error("❌ createAccount error:", txt);
+    throw new Error("Failed to create account");
+  }
+
   return res.json();
 }
 
@@ -59,24 +95,42 @@ export async function updateAccount(id, data) {
     },
     body: JSON.stringify(data),
   });
-  if (!res.ok) throw new Error("Failed to update account");
+
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error("❌ updateAccount error:", txt);
+    throw new Error("Failed to update account");
+  }
+
   return res.json();
 }
 
 export async function deleteAccount(id) {
   const res = await fetch(`${API_BASE_URL}/accounts/${id}`, {
     method: "DELETE",
-    headers: {
-      ...getAuthHeaders(),
-    },
+    headers: { ...getAuthHeaders() },
   });
-  if (!res.ok) throw new Error("Failed to delete account");
+
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error("❌ deleteAccount error:", txt);
+    throw new Error("Failed to delete account");
+  }
+
   return res.json();
 }
 
-// ===== STATS (lượt truy cập) =====
+// ==============================================
+// STATS
+// ==============================================
 export async function fetchStats() {
   const res = await fetch(`${API_BASE_URL}/stats`);
-  if (!res.ok) throw new Error("Failed to fetch stats");
-  return res.json(); // ví dụ backend trả: { visits: 123 }
+
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error("❌ fetchStats error:", txt);
+    throw new Error("Failed to fetch stats");
+  }
+
+  return res.json();
 }

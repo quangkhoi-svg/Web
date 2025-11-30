@@ -144,13 +144,14 @@ function Gallery() {
         </div>
       )}
 
-      {/* DANH SÁCH ITEM */}
+        {/* DANH SÁCH ITEM */}
       {filteredAccounts.length === 0 ? (
         <p style={{ marginTop: "1rem" }}>Không tìm thấy trang phục phù hợp.</p>
       ) : (
         <div className="gallery-grid">
           {filteredAccounts.map((acc) => (
-            <AccountCard key={acc.id} account={acc} />
+            // 🔥 dùng _id thay vì id
+            <AccountCard key={acc._id || acc.id} account={acc} />
           ))}
         </div>
       )}

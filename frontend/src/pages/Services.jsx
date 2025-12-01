@@ -5,20 +5,42 @@ import {
   SERVICES_STORAGE_KEY,
 } from "../data/servicesConfig";
 
-/**
- * BUNDLE BOT DISCORD – chỉ dùng để hiển thị trong modal "Bot Discord"
- */
+/* =====================================================
+   HÀM CHUẨN — ĐỌC DỮ LIỆU GIỐNG CHÍNH XÁC AdminServices
+===================================================== */
+function loadServicesFromStorage() {
+  try {
+    const raw = localStorage.getItem(SERVICES_STORAGE_KEY);
+    if (!raw) return DEFAULT_SERVICES;
+
+    const parsed = JSON.parse(raw);
+
+    // Chỉ chấp nhận array hợp lệ
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed;
+    }
+
+    return DEFAULT_SERVICES;
+  } catch (e) {
+    console.error("loadServicesFromStorage error:", e);
+    return DEFAULT_SERVICES;
+  }
+}
+
+/* =====================================================
+   DANH SÁCH BOT DISCORD
+===================================================== */
 const DISCORD_BOTS = [
   {
     id: "bot-moderation",
     title: "Moderation AI Bot",
     subtitle: "AI auto-moderation & server security",
     features: [
-      "AI Toxicity Filter (lọc chửi, toxic, spam)",
-      "Anti Spam / Anti Flood / Anti mass ping",
+      "AI Toxicity Filter",
+      "Anti Spam / Anti Flood",
       "Chặn NSFW / scam link",
-      "Auto Warn • Mute • Ban theo cấp độ",
-      "Hệ thống Strike + Slowmode thông minh",
+      "Auto Warn • Mute • Ban",
+      "Slowmode thông minh",
     ],
   },
   {
@@ -26,11 +48,11 @@ const DISCORD_BOTS = [
     title: "Verification Security Bot",
     subtitle: "Captcha verification & auto role",
     features: [
-      "Verify bằng Captcha / Button",
+      "Verify Captcha / Button",
       "Auto role sau verify",
       "Chặn multi-account",
-      "Khoá quyền xem kênh trước khi verify",
-      "Log đầy đủ: verify thành công / thất bại",
+      "Khoá quyền xem kênh",
+      "Log verify",
     ],
   },
   {
@@ -38,11 +60,11 @@ const DISCORD_BOTS = [
     title: "Ticket Support Bot",
     subtitle: "Professional ticket management",
     features: [
-      "Ticket theo category: Report, Donate, Support…",
+      "Ticket theo category",
       "Staff claim / assign / close",
-      "Lưu transcript TXT/PDF",
-      "Ticket log đầy đủ",
-      "Auto close khi quá thời gian",
+      "Lưu transcript",
+      "Ticket log",
+      "Auto close",
     ],
   },
   {
@@ -50,93 +72,25 @@ const DISCORD_BOTS = [
     title: "Welcome & Profile Bot",
     subtitle: "Welcome card + auto roles",
     features: [
-      "Welcome card đẹp, hỗ trợ AI",
-      "Auto role theo giới tính / nhóm",
-      "Auto format nickname",
-      "Profile command (xem hồ sơ / info)",
+      "Welcome card đẹp",
+      "Auto role",
+      "Auto nickname",
+      "Profile command",
       "Join / Leave logs",
-    ],
-  },
-  {
-    id: "bot-music",
-    title: "Music Premium Bot",
-    subtitle: "High-quality music streaming",
-    features: [
-      "YouTube • Spotify • Soundcloud",
-      "BassBoost • 3D • Nightcore",
-      "24/7 voice channel mode",
-      "Playlist system",
-      "Lyrics command",
-    ],
-  },
-  {
-    id: "bot-level",
-    title: "Level & Rank Bot",
-    subtitle: "XP & ranking system",
-    features: [
-      "Anti-farm XP",
-      "Level / Rank roles",
-      "Level card đẹp",
-      "Leaderboard",
-      "Daily / weekly rewards",
-    ],
-  },
-  {
-    id: "bot-logging",
-    title: "Logging Bot",
-    subtitle: "Full system logs",
-    features: [
-      "Log tin nhắn xoá / sửa",
-      "Log join / leave",
-      "Log đổi avatar / tên",
-      "Log role add / remove",
-      "Log tạo / xoá channel",
-    ],
-  },
-  {
-    id: "bot-utility",
-    title: "Utility Tools Bot",
-    subtitle: "Tools & server support",
-    features: [
-      "Ping host / server",
-      "Weather / Time",
-      "QR generator",
-      "Random picker",
-      "Suggestion system + embed builder",
-    ],
-  },
-  {
-    id: "bot-event",
-    title: "Event & Quest Bot",
-    subtitle: "Daily missions & events",
-    features: [
-      "Daily / weekly mission",
-      "Gacha system",
-      "Random drops",
-      "Event XP & điểm tích luỹ",
-      "Mini game tuỳ chỉnh",
-    ],
-  },
-  {
-    id: "bot-economy",
-    title: "Economy Bot",
-    subtitle: "Currency + shop system",
-    features: [
-      "Custom currency (tiền riêng của server)",
-      "Shop item / role",
-      "Bank system",
-      "Inventory",
-      "Trade & chuyển tiền giữa member",
     ],
   },
 ];
 
-export default function Services() {
-  const [services, setServices] = useState(DEFAULT_SERVICES);
-  const [view, setView] = useState(null); // dịch vụ đang mở gallery
-  const [zoomItem, setZoomItem] = useState(null); // media đang phóng to
+/* =====================================================
+   COMPONENT CHÍNH
+===================================================== */
 
-  // Khóa scroll khi modal mở
+export default function Services() {
+  const [services] = useState(loadServicesFromStorage); // ⭐ CHUẨN HOÁ
+  const [view, setView] = useState(null);
+  const [zoomItem, setZoomItem] = useState(null);
+
+  /* ====== KHÓA SCROLL KHI MỞ MODAL ====== */
   useEffect(() => {
     const original = document.body.style.overflow;
     if (view || zoomItem) document.body.style.overflow = "hidden";
@@ -147,14 +101,7 @@ export default function Services() {
     };
   }, [view, zoomItem]);
 
-  // Load từ localStorage (Admin đã chỉnh sửa)
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(SERVICES_STORAGE_KEY);
-      if (raw) setServices(JSON.parse(raw));
-    } catch {}
-  }, []);
-
+  /* ====== MỞ / ĐÓNG MODAL ====== */
   const openGallery = (service) => setView(service);
   const closeGallery = () => setView(null);
 
@@ -162,7 +109,7 @@ export default function Services() {
     ? [...(view.demoImages || []), ...(view.demoVideos || [])]
     : [];
 
-  // Render media (ảnh, video, youtube)
+  /* ====== HÀM RENDER MEDIA ====== */
   const renderMedia = (src, extraProps = {}) => {
     const isYoutube = src.includes("youtube") || src.includes("youtu.be");
     const isVideo = src.endsWith(".mp4") || src.endsWith(".webm");
@@ -184,7 +131,7 @@ export default function Services() {
     return <img src={src} alt="" {...extraProps} />;
   };
 
-  // ✅ Xác định service "Bot Discord"
+  /* ====== XÁC ĐỊNH DỊCH VỤ LÀ BOT DISCORD ====== */
   const isDiscordBotService = (svc) => {
     if (!svc) return false;
     const id = (svc.id || "").toLowerCase();
@@ -196,6 +143,9 @@ export default function Services() {
     );
   };
 
+  /* =====================================================
+     UI TRANG SERVICES
+  ====================================================== */
   return (
     <div className="page-container services-page">
       {/* ======================= HERO ======================= */}
@@ -242,6 +192,7 @@ export default function Services() {
           </div>
         </div>
 
+        {/* Hero nhỏ */}
         <div className="services-hero-panel">
           <p className="hero-panel-title">Nhóm dịch vụ nổi bật</p>
 
@@ -277,7 +228,7 @@ export default function Services() {
 
               <p className="service-card-desc">{s.description}</p>
 
-              {/* ⭐ LIST CHỨC NĂNG BOT (nếu có trong config) ⭐ */}
+              {/* CHỨC NĂNG BOT */}
               {s.features && s.features.length > 0 && (
                 <ul className="service-feature-preview">
                   {s.features.slice(0, 5).map((ft, idx) => (
@@ -311,13 +262,12 @@ export default function Services() {
             <h2 className="gallery-title">{view.demoTitle}</h2>
             <p className="gallery-desc">{view.demoDescription}</p>
 
-            {/* 🔥 RIÊNG CHO DỊCH VỤ BOT DISCORD: HIỆN BẢNG BOT */}
+            {/* BẢNG BOT DISCORD */}
             {isDiscordBotService(view) && (
               <section className="bot-discord-section">
                 <p className="bot-discord-intro">
                   Gói <strong>Bot Discord</strong> gồm nhiều bot chuyên từng
-                  mảng: moderation, bảo mật, ticket, music, economy… Bạn có thể
-                  chọn full pack hoặc từng bot riêng tùy nhu cầu server.
+                  mảng tuỳ theo nhu cầu server.
                 </p>
 
                 <div className="bot-discord-grid">
@@ -325,19 +275,18 @@ export default function Services() {
                     <div key={bot.id} className="bot-discord-card">
                       <h3 className="bot-discord-title">{bot.title}</h3>
                       <p className="bot-discord-sub">{bot.subtitle}</p>
-                    <ul className="bot-discord-list">
-  {bot.features.map((f) => (
-    <li key={f}>{f}</li>
-  ))}
-</ul>
-
+                      <ul className="bot-discord-list">
+                        {bot.features.map((f) => (
+                          <li key={f}>{f}</li>
+                        ))}
+                      </ul>
                     </div>
                   ))}
                 </div>
               </section>
             )}
 
-            {/* PHẦN GALLERY ẢNH / VIDEO (nếu có) */}
+            {/* GALLERY MEDIA */}
             <div className="gallery-grid" style={{ marginTop: 16 }}>
               {slideshow.length === 0 && !isDiscordBotService(view) && (
                 <p className="service-modal-empty">
@@ -359,7 +308,7 @@ export default function Services() {
         </div>
       )}
 
-      {/* ======================= MODAL ZOOM MEDIA ======================= */}
+      {/* ======================= MODAL ZOOM ======================= */}
       {zoomItem && (
         <div
           className="image-viewer-overlay"

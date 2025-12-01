@@ -134,3 +134,25 @@ export async function fetchStats() {
 
   return res.json();
 }
+// ==============================================
+// UPLOAD MEDIA (ảnh / GIF / video) LÊN VPS
+// ==============================================
+export async function uploadMedia(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(`${API_BASE_URL}/upload`, {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    console.error("❌ uploadMedia error:", data);
+    throw new Error(data.message || "Upload media thất bại");
+  }
+
+  // Backend trả { message, url, mimetype }
+  return data;
+}

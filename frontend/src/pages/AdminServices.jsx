@@ -15,7 +15,7 @@ async function uploadToServer(file) {
   const fd = new FormData();
   fd.append("file", file);
 
-  const res = await fetch("http://localhost:4000/api/upload", {
+const res = await fetch("https://api.nhayen.click/api/upload", {
     method: "POST",
     body: fd,
   });
